@@ -1,7 +1,6 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +10,9 @@ import javax.persistence.Id;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@Getter
+@Setter
 public class TestEntity {
 
     @Id
