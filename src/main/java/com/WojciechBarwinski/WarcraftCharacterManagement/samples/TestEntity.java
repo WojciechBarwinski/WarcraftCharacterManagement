@@ -1,4 +1,4 @@
-package com.WojciechBarwinski.WarcraftCharacterManagement;
+package com.WojciechBarwinski.WarcraftCharacterManagement.samples;
 
 import lombok.*;
 

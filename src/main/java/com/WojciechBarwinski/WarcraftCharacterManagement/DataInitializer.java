@@ -1,5 +1,7 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement;
 
+import com.WojciechBarwinski.WarcraftCharacterManagement.samples.TestEntity;
+import com.WojciechBarwinski.WarcraftCharacterManagement.samples.TestRepository;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;

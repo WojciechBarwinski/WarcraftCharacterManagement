@@ -1,8 +1,8 @@
-package com.WojciechBarwinski.WarcraftCharacterManagement.controllers;
+package com.WojciechBarwinski.WarcraftCharacterManagement.samples;
 
 
-import com.WojciechBarwinski.WarcraftCharacterManagement.TestEntity;
-import com.WojciechBarwinski.WarcraftCharacterManagement.TestRepository;
+import com.WojciechBarwinski.WarcraftCharacterManagement.samples.TestEntity;
+import com.WojciechBarwinski.WarcraftCharacterManagement.samples.TestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
