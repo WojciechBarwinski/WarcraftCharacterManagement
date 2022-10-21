@@ -1,5 +1,6 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Entities;
 
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,19 +11,17 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "items")
-public class Item {
+@AllArgsConstructor
+@Table(name = "races")
+public class Race {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @ManyToOne(cascade=CascadeType.ALL)
-    private Hero owner;
+    @Column(name = "race")
+    private String raceName;
 
     @Lob
-    private String itemDescription;
-
+    @NotNull
+    @Column(name = "description")
+    private String raceDescription;
 }
