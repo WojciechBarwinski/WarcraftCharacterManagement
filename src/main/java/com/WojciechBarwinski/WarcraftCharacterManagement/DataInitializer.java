@@ -7,6 +7,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,17 +19,23 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
     RaceRepository raceRepository;
     FractionRepository fractionRepository;
     PlaceRepository placeRepository;
+    AuthorRepository authorRepository;
+    BookRepository bookRepository;
 
     public DataInitializer(HeroRepository heroRepository,
                            ItemRepository itemRepository,
                            RaceRepository raceRepository,
                            FractionRepository fractionRepository,
-                           PlaceRepository placeRepository) {
+                           PlaceRepository placeRepository,
+                           AuthorRepository authorRepository,
+                           BookRepository bookRepository) {
         this.heroRepository = heroRepository;
         this.itemRepository = itemRepository;
         this.raceRepository = raceRepository;
         this.fractionRepository = fractionRepository;
         this.placeRepository = placeRepository;
+        this.authorRepository = authorRepository;
+        this.bookRepository = bookRepository;
     }
 
     @Override
@@ -39,6 +46,8 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         raceRepository.saveAll(createListOfRacesToAdd());
         fractionRepository.saveAll(createListOfFractionsToAdd());
         placeRepository.saveAll(createListOfPlacesToAdd());
+        authorRepository.saveAll(createListOfAuthorsToAdd());
+        bookRepository.saveAll(createListOfBooksToAdd());
 
         Item bow = new Item();
         Item sword = new Item();
@@ -80,6 +89,10 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 
         sylvanas.addTitle("suka");
         sylvanas.addTitle("królowa nieumarłych");
+
+        bookRepository.findById(1L).get().setAuthor(authorRepository.findById(1L).get());
+        bookRepository.findById(2L).get().setAuthor(authorRepository.findById(1L).get());
+        bookRepository.findById(3L).get().setAuthor(authorRepository.findById(2L).get());
 
         bow.setOwner(sylvanas);
         sword.setOwner(tyrande);
@@ -125,5 +138,20 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         places.add(new Place("Durotar", "opis Durotaru"));
         return places;
     }
+    private static List<Author> createListOfAuthorsToAdd(){
+        List<Author> authors = new ArrayList<>();
+        authors.add(new Author("Richard A.", "Knaak", "USA"));
+        authors.add(new Author("Christie", "Golden", "USA"));
+        return authors;
+    }
+    private static List<Book> createListOfBooksToAdd(){
+        List<Book> books = new ArrayList<>();
 
+        books.add(new Book("The Well of Eternity", "jakis tam opis"));
+            books.get(0).setSeries("War of The Ancients");
+        books.add(new Book("The Demon Soul", "jakis tam opis"));
+            books.get(1).setSeries("War of The Ancients");
+        books.add(new Book("Sylvanas", "jakis tam opis"));
+        return books;
+    }
 }
