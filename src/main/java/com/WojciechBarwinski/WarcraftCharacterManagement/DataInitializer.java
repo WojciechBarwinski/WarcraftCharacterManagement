@@ -44,27 +44,34 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 
         Item bow = new Item();
         Item sword = new Item();
-        bow.setItemDescription("jakiś tam opis luku");
-        sword.setItemDescription("jakis tam opis miecza");
+        bow.setDescription("jakiś tam opis luku");
+        sword.setDescription("jakis tam opis miecza");
         Hero sylvanas = heroRepository.findById(1L).get();
         Hero tyrande = heroRepository.findById(2L).get();
         Hero thrall = heroRepository.findById(3L).get();
         Hero alinya = heroRepository.findById(4L).get();
         Hero shandris = heroRepository.findById(5L).get();
-        sylvanas.setRace(raceRepository.findByRaceName("Undead").get());
-        tyrande.setRace(raceRepository.findByRaceName("Night Elf").get());
-        shandris.setRace(raceRepository.findByRaceName("Night Elf").get());
-        alinya.setRace(raceRepository.findByRaceName("Night Elf").get());
-        thrall.setRace(raceRepository.findByRaceName("Orc").get());
+        sylvanas.setRace(raceRepository.findByName("Undead").get());
+        tyrande.setRace(raceRepository.findByName("Night Elf").get());
+        shandris.setRace(raceRepository.findByName("Night Elf").get());
+        alinya.setRace(raceRepository.findByName("Night Elf").get());
+        thrall.setRace(raceRepository.findByName("Orc").get());
 
-        Fraction elune = fractionRepository.findByFractionName("Sisterhood of Elune").get();
-        Fraction horde = fractionRepository.findByFractionName("Horde").get();
-        Fraction alliance = fractionRepository.findByFractionName("Alliance").get();
-        Fraction forsaken = fractionRepository.findByFractionName("Forsaken").get();
+        Fraction elune = fractionRepository.findByName("Sisterhood of Elune").get();
+        Fraction horde = fractionRepository.findByName("Horde").get();
+        Fraction alliance = fractionRepository.findByName("Alliance").get();
+        Fraction forsaken = fractionRepository.findByName("Forsaken").get();
 
         elune.addHeroToFraction(tyrande);
         elune.addHeroToFraction(alinya);
         elune.addHeroToFraction(shandris);
+        horde.addHeroToFraction(thrall);
+        horde.addHeroToFraction(sylvanas);
+        alliance.addHeroToFraction(tyrande);
+        alliance.addHeroToFraction(alinya);
+        alliance.addHeroToFraction(shandris);
+        forsaken.addHeroToFraction(sylvanas);
+
 
         bow.setOwner(sylvanas);
         sword.setOwner(tyrande);
@@ -72,7 +79,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         itemRepository.save(sword);
     }
 
-    static List<Hero> createListOfHeroesToAdd(){
+    private static List<Hero> createListOfHeroesToAdd(){
         List<Hero> heroes = new ArrayList<>();
 
         heroes.add(new Hero("Sylvanas", "Windrunner"));
@@ -82,7 +89,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         heroes.add(new Hero("Shandris", "Feathermoon"));
         return heroes;
     }
-    static List<Race> createListOfRacesToAdd(){
+    private static List<Race> createListOfRacesToAdd(){
         List<Race> races = new ArrayList<>();
 
         races.add(new Race("Night Elf", "Jakis tam opis elfow"));
@@ -92,7 +99,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         races.add(new Race("Orc", "Jakis tam opis orka"));
         return races;
     }
-    static List<Fraction> createListOfFractionsToAdd(){
+    private static List<Fraction> createListOfFractionsToAdd(){
         List<Fraction> fractions = new ArrayList<>();
 
         fractions.add(new Fraction("Sisterhood of Elune", "opis frakcji"));

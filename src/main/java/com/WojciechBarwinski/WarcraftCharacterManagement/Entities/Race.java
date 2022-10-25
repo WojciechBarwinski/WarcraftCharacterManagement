@@ -17,11 +17,9 @@ import javax.persistence.*;
 public class Race {
 
     @Id
-    @Column(name = "race")
-    private String raceName;
+    private String name;
 
     @Lob
     @NotNull
-    @Column(name = "description")
-    private String raceDescription;
+    private String description;
 }

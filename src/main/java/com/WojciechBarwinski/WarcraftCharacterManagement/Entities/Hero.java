@@ -1,9 +1,6 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -18,9 +15,10 @@ import java.util.Set;
 public class Hero {
 
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        @Column(name = "id")
+        @Setter(AccessLevel.NONE)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
+
         private String firstName;
         private String lastName;
 

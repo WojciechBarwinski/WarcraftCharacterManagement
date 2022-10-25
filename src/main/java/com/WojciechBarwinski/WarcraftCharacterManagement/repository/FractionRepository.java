@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface FractionRepository extends JpaRepository<Fraction, Long> {
 
-    Optional<Fraction> findByFractionName(String fractionName);
+    Optional<Fraction> findByName(String fractionName);
 }

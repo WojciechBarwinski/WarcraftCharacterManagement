@@ -1,5 +1,6 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Entities;
 
+
 import lombok.*;
 
 import javax.persistence.*;
@@ -7,22 +8,15 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "items")
-public class Item {
+@AllArgsConstructor
+@Table(name = "places")
+public class Place {
 
     @Id
     @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
-    @ManyToOne(cascade=CascadeType.ALL)
-    private Hero owner;
-
-    @Lob
-    private String description;
 
 }

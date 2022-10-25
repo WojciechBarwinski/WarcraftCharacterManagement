@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface RaceRepository extends JpaRepository<Race, Long> {
 
-    Optional<Race> findByRaceName(String raceName);
+    Optional<Race> findByName(String raceName);
 }

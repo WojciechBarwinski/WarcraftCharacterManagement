@@ -1,10 +1,7 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Entities;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,18 +12,18 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "fractions")
 public class Fraction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @Setter(AccessLevel.NONE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    private String fractionName;
+    private String name;
 
     @Lob
-    @Column(name = "description")
-    private String fractionDescription;
+    private String description;
 
     @ManyToMany
     @JoinTable(
@@ -37,9 +34,9 @@ public class Fraction {
 
 
 
-    public Fraction(String fractionName, String fractionDescription) {
-        this.fractionName = fractionName;
-        this.fractionDescription = fractionDescription;
+    public Fraction(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     public void addHeroToFraction(Hero hero){
