@@ -18,5 +18,16 @@ public class Place {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
 
+    @Lob
+    private String description;
+
+    @ManyToOne
+    private Place upperLocation;
+
+    public Place(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }

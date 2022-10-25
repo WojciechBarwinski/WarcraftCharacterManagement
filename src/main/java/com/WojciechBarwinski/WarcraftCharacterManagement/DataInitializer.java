@@ -1,13 +1,7 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement;
 
-import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Fraction;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Hero;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Item;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Race;
-import com.WojciechBarwinski.WarcraftCharacterManagement.repository.FractionRepository;
-import com.WojciechBarwinski.WarcraftCharacterManagement.repository.HeroRepository;
-import com.WojciechBarwinski.WarcraftCharacterManagement.repository.ItemRepository;
-import com.WojciechBarwinski.WarcraftCharacterManagement.repository.RaceRepository;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.*;
+import com.WojciechBarwinski.WarcraftCharacterManagement.repository.*;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -23,15 +17,18 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
     ItemRepository itemRepository;
     RaceRepository raceRepository;
     FractionRepository fractionRepository;
+    PlaceRepository placeRepository;
 
     public DataInitializer(HeroRepository heroRepository,
                            ItemRepository itemRepository,
                            RaceRepository raceRepository,
-                           FractionRepository fractionRepository) {
+                           FractionRepository fractionRepository,
+                           PlaceRepository placeRepository) {
         this.heroRepository = heroRepository;
         this.itemRepository = itemRepository;
         this.raceRepository = raceRepository;
         this.fractionRepository = fractionRepository;
+        this.placeRepository = placeRepository;
     }
 
     @Override
@@ -41,6 +38,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         heroRepository.saveAll(createListOfHeroesToAdd());
         raceRepository.saveAll(createListOfRacesToAdd());
         fractionRepository.saveAll(createListOfFractionsToAdd());
+        placeRepository.saveAll(createListOfPlacesToAdd());
 
         Item bow = new Item();
         Item sword = new Item();
@@ -51,16 +49,20 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         Hero thrall = heroRepository.findById(3L).get();
         Hero alinya = heroRepository.findById(4L).get();
         Hero shandris = heroRepository.findById(5L).get();
-        sylvanas.setRace(raceRepository.findByName("Undead").get());
-        tyrande.setRace(raceRepository.findByName("Night Elf").get());
-        shandris.setRace(raceRepository.findByName("Night Elf").get());
-        alinya.setRace(raceRepository.findByName("Night Elf").get());
-        thrall.setRace(raceRepository.findByName("Orc").get());
+        sylvanas.setRace(raceRepository.findByName("Undead"));
+        tyrande.setRace(raceRepository.findByName("Night Elf"));
+        shandris.setRace(raceRepository.findByName("Night Elf"));
+        alinya.setRace(raceRepository.findByName("Night Elf"));
+        thrall.setRace(raceRepository.findByName("Orc"));
 
-        Fraction elune = fractionRepository.findByName("Sisterhood of Elune").get();
-        Fraction horde = fractionRepository.findByName("Horde").get();
-        Fraction alliance = fractionRepository.findByName("Alliance").get();
-        Fraction forsaken = fractionRepository.findByName("Forsaken").get();
+        Fraction elune = fractionRepository.findByName("Sisterhood of Elune");
+        Fraction horde = fractionRepository.findByName("Horde");
+        Fraction alliance = fractionRepository.findByName("Alliance");
+        Fraction forsaken = fractionRepository.findByName("Forsaken");
+
+        placeRepository.findByName("Kalimdor").setUpperLocation(placeRepository.findByName("Azeroth"));
+        placeRepository.findByName("Tendrasill").setUpperLocation(placeRepository.findByName("Kalimdor"));
+        placeRepository.findByName("Durotar").setUpperLocation(placeRepository.findByName("Kalimdor"));
 
         elune.addHeroToFraction(tyrande);
         elune.addHeroToFraction(alinya);
@@ -72,6 +74,12 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         alliance.addHeroToFraction(shandris);
         forsaken.addHeroToFraction(sylvanas);
 
+        tyrande.addTitle("aaaa");
+        tyrande.addTitle("bbb");
+        tyrande.addTitle("cccc");
+
+        sylvanas.addTitle("suka");
+        sylvanas.addTitle("królowa nieumarłych");
 
         bow.setOwner(sylvanas);
         sword.setOwner(tyrande);
@@ -107,6 +115,15 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         fractions.add(new Fraction("Forsaken", "opis frakcji"));
         fractions.add(new Fraction("Horde", "opis frakcji"));
         return fractions;
+    }
+    private static List<Place> createListOfPlacesToAdd(){
+        List<Place> places = new ArrayList<>();
+
+        places.add(new Place("Azeroth", "opis Azeroth"));
+        places.add(new Place("Kalimdor", "opis Kalimdoru"));
+        places.add(new Place("Tendrasill", "opis Tendrassil"));
+        places.add(new Place("Durotar", "opis Durotaru"));
+        return places;
     }
 
 }

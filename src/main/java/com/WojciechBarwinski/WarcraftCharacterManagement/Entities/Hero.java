@@ -3,7 +3,9 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,6 +24,11 @@ public class Hero {
         private String firstName;
         private String lastName;
 
+        @ElementCollection
+        @CollectionTable(name = "hero_title")
+        @Column(name = "title")
+        private List<String> titles = new ArrayList<>();
+
         @ManyToOne
         private Race race;
 
@@ -33,5 +40,10 @@ public class Hero {
                 this.lastName = lastName;
         }
 
-
+        public void addTitle(String newTitle) {
+                if (titles == null){
+                        titles = new ArrayList<>();
+                }
+                titles.add(newTitle);
+        }
 }
