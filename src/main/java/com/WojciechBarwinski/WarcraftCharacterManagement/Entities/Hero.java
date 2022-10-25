@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -25,8 +27,13 @@ public class Hero {
         @ManyToOne
         private Race race;
 
+        @ManyToMany(mappedBy = "heroes")
+        private Set<Fraction> fractions = new HashSet<>();
+
         public Hero(String firstName, String lastName) {
                 this.firstName = firstName;
                 this.lastName = lastName;
         }
+
+
 }
