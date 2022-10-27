@@ -1,7 +1,8 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement;
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.*;
-import com.WojciechBarwinski.WarcraftCharacterManagement.repository.*;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.*;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Services.RelationService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
     PlaceRepository placeRepository;
     AuthorRepository authorRepository;
     BookRepository bookRepository;
+    RelationService relationService;
 
     public DataInitializer(HeroRepository heroRepository,
                            ItemRepository itemRepository,
@@ -28,7 +30,8 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
                            FractionRepository fractionRepository,
                            PlaceRepository placeRepository,
                            AuthorRepository authorRepository,
-                           BookRepository bookRepository) {
+                           BookRepository bookRepository,
+                           RelationService relationService) {
         this.heroRepository = heroRepository;
         this.itemRepository = itemRepository;
         this.raceRepository = raceRepository;
@@ -36,6 +39,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         this.placeRepository = placeRepository;
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
+        this.relationService = relationService;
     }
 
     @Override
@@ -105,6 +109,8 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         sylv.addHeroToBook(sylvanas);
         sylv.addHeroToBook(thrall);
         sylv.addHeroToBook(tyrande);
+
+        relationService.addTwoDirectionsRelation(tyrande.getId(), shandris.getId(), "przybrana córka", "przybrana matka");
 
         bow.setOwner(sylvanas);
         sword.setOwner(tyrande);
