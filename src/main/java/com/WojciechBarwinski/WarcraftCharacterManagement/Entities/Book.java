@@ -4,6 +4,8 @@ import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -29,8 +31,19 @@ public class Book {
     @ManyToOne
     private Author author;
 
+    @ManyToMany
+    @JoinTable(
+            name = "hero_book",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "hero_id"))
+    private Set<Hero> heroes = new HashSet<>();
+
     public Book(String title, String description) {
         this.title = title;
         this.description = description;
+    }
+
+    public void addHeroToBook(Hero hero){
+        heroes.add(hero);
     }
 }

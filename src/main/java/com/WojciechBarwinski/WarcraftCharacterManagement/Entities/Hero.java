@@ -35,6 +35,9 @@ public class Hero {
         @ManyToMany(mappedBy = "heroes")
         private Set<Fraction> fractions = new HashSet<>();
 
+        @ManyToMany(mappedBy = "heroes")
+        private Set<Book> books = new HashSet<>();
+
         public Hero(String firstName, String lastName) {
                 this.firstName = firstName;
                 this.lastName = lastName;

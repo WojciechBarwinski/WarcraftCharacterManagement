@@ -90,9 +90,21 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         sylvanas.addTitle("suka");
         sylvanas.addTitle("królowa nieumarłych");
 
-        bookRepository.findById(1L).get().setAuthor(authorRepository.findById(1L).get());
-        bookRepository.findById(2L).get().setAuthor(authorRepository.findById(1L).get());
-        bookRepository.findById(3L).get().setAuthor(authorRepository.findById(2L).get());
+        Book tWoE = bookRepository.findById(1L).get();
+        Book tDS = bookRepository.findById(2L).get();
+        Book sylv = bookRepository.findById(3L).get();
+
+        tWoE.setAuthor(authorRepository.findById(1L).get());
+        tWoE.addHeroToBook(tyrande);
+        tWoE.addHeroToBook(shandris);
+
+        tDS.setAuthor(authorRepository.findById(1L).get());
+        tDS.addHeroToBook(tyrande);
+
+        sylv.setAuthor(authorRepository.findById(2L).get());
+        sylv.addHeroToBook(sylvanas);
+        sylv.addHeroToBook(thrall);
+        sylv.addHeroToBook(tyrande);
 
         bow.setOwner(sylvanas);
         sword.setOwner(tyrande);
