@@ -20,7 +20,7 @@ public class HeroDTO {
     private Long id;
     private String firstName;
     private String lastName;
-    //private Race race;
-    //private Set<Fraction> fractions = new HashSet<>();
-    //private Set<Book> books = new HashSet<>();
+    private String race;
+    private Set<String> fractions = new HashSet<>();
+    private Set<String> books = new HashSet<>();
 }
