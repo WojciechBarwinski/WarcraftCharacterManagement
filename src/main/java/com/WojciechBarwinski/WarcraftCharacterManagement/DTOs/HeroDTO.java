@@ -3,16 +3,14 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.DTOs;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Book;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Fraction;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Race;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class HeroDTO {

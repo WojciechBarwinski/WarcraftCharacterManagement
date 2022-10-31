@@ -13,13 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper.mapHeroDTOToHero;
 import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper.mapHeroToHeroDTO;
 
 @Service
 public class HeroServiceImpl implements HeroService {
 
     HeroRepository heroRepository;
-    private static final int PAGE_SIZE = 8;
+    private static final int PAGE_SIZE = 5;
 
 
     public HeroServiceImpl(HeroRepository heroRepository) {
@@ -35,12 +36,6 @@ public class HeroServiceImpl implements HeroService {
     }
 
     @Override
-    public HeroDTO getOneHero() {
-        Hero hero = heroRepository.findById(1L).get();
-        return mapHeroToHeroDTO(hero);
-    }
-
-    @Override
     public HeroDTO getHeroById(Long id) {
         Optional<Hero> hero = heroRepository.findById(id);
 
@@ -49,5 +44,10 @@ public class HeroServiceImpl implements HeroService {
         }
         return mapHeroToHeroDTO(hero.get());
     }
-    
+
+    @Override
+    public void addHero(HeroDTO hero) {
+        Hero save = heroRepository.save(mapHeroDTOToHero(hero));
+    }
+
 }

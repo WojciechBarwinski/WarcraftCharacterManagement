@@ -27,6 +27,12 @@ public class HeroMapper {
         return heroDTO;
     }
 
+    public static Hero mapHeroDTOToHero(HeroDTO heroDTO){
+        Hero newHero = new Hero();
+        newHero.setFirstName(heroDTO.getFirstName());
+        newHero.setLastName(heroDTO.getLastName());
+        return newHero;
+    }
     private static Set<String> mapFactions(Set<Fraction> fractions){
         Set<String> mappedFractions = new HashSet<>();
         for (Fraction fraction : fractions) {
@@ -42,4 +48,5 @@ public class HeroMapper {
         }
         return mappedBooks;
     }
+
 }

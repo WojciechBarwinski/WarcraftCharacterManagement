@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface HeroService {
     List<HeroDTO> getAllHeroes(int page, Sort.Direction direction);
-    HeroDTO getOneHero();
     HeroDTO getHeroById(Long id);
+
+    void addHero(HeroDTO hero);
 }
