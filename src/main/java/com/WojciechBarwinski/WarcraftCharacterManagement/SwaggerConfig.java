@@ -23,20 +23,17 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.regex("^(?!/(error).*$).*$"))
-                .build();
-                //.apiInfo(apiInfo());
+                .build()
+                .apiInfo(apiInfo());
     }
 
 
-    /*private ApiInfo apiInfo() {
+    private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Java Hungry API")
-                .description("Java Hungry API's")
-                .version("1.0.0")
-                .termsOfServiceUrl("http://javahungry.blogspot.com")
-                .license("JavaHungry License")
-                .licenseUrl("http://javahungry.blogspot.com")
+                .title("REST CRUD Java Warcraft Characters managment")
+                .description("REST API pozwalające na zarządzie danymi w BD")
+                .version("Alpha")
                 .build();
-    }*/
+    }
 }
 

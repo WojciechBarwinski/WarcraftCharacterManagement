@@ -9,7 +9,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+//TODO dodac buildera i przerefactorować
 public class HeroMapper {
+
+    private HeroMapper() {
+    }
 
     public static HeroDTO mapHeroToHeroDTO(Hero hero){
         HeroDTO heroDTO = new HeroDTO();

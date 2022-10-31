@@ -28,7 +28,7 @@ public class Book {
     @Lob
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Author author;
 
     @ManyToMany
