@@ -62,11 +62,11 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         Hero thrall = heroRepository.findById(3L).get();
         Hero alinya = heroRepository.findById(4L).get();
         Hero shandris = heroRepository.findById(5L).get();
-        sylvanas.setRace(raceRepository.findByName("Undead"));
-        tyrande.setRace(raceRepository.findByName("Night Elf"));
-        shandris.setRace(raceRepository.findByName("Night Elf"));
-        alinya.setRace(raceRepository.findByName("Night Elf"));
-        thrall.setRace(raceRepository.findByName("Orc"));
+        sylvanas.setRace(raceRepository.findByName("Undead").get());
+        tyrande.setRace(raceRepository.findByName("Night Elf").get());
+        shandris.setRace(raceRepository.findByName("Night Elf").get());
+        alinya.setRace(raceRepository.findByName("Night Elf").get());
+        thrall.setRace(raceRepository.findByName("Orc").get());
 
         Fraction elune = fractionRepository.findByName("Sisterhood of Elune");
         Fraction horde = fractionRepository.findByName("Horde");

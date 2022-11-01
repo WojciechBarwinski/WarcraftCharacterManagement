@@ -16,4 +16,5 @@ public interface HeroRepository extends JpaRepository<Hero, Long> {
             "JOIN FETCH h.race " +
             "LEFT JOIN FETCH h.fractions")
     List<Hero> findAllHeroes(Pageable page);
+    Hero findByFirstName(String firstName);
 }

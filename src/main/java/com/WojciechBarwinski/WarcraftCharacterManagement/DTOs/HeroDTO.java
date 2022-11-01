@@ -1,8 +1,5 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.DTOs;
 
-import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Book;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Fraction;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Race;
 import lombok.*;
 
 import java.util.HashSet;

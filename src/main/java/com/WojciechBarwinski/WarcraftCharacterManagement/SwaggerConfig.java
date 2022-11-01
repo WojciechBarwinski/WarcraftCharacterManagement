@@ -30,8 +30,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("REST CRUD Java Warcraft Characters managment")
-                .description("REST API pozwalające na zarządzie danymi w BD")
+                .title("REST CRUD Java Warcraft Characters management")
+                .description("REST API pozwalające na zarządzanie danymi w BD")
                 .version("Alpha")
                 .build();
     }
