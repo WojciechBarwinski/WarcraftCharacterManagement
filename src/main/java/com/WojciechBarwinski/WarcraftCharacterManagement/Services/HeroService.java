@@ -2,7 +2,6 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Services;
 
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTO;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Hero;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
@@ -11,6 +10,6 @@ public interface HeroService {
     List<HeroDTO> getAllHeroes(int page, Sort.Direction direction);
     HeroDTO getHeroById(Long id);
     HeroDTO getHeroByFirstName(String firstName);
-
-    void addHero(HeroDTO hero);
+    HeroDTO createNewHero(HeroDTO hero);
+    HeroDTO updateHero(HeroDTO hero, Long id);
 }

@@ -31,6 +31,10 @@ public class HeroMapper {
         Hero newHero = new Hero();
         newHero.setFirstName(heroDTO.getFirstName());
         newHero.setLastName(heroDTO.getLastName());
+
+        if (heroDTO.getId() != null){
+            newHero.setId(heroDTO.getId());
+        }
         return newHero;
     }
     private static Set<String> mapFactions(Set<Fraction> fractions){

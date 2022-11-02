@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface HeroRepository extends JpaRepository<Hero, Long> {
@@ -16,5 +17,5 @@ public interface HeroRepository extends JpaRepository<Hero, Long> {
             "JOIN FETCH h.race " +
             "LEFT JOIN FETCH h.fractions")
     List<Hero> findAllHeroes(Pageable page);
-    Hero findByFirstName(String firstName);
+    Optional<Hero> findByFirstName(String firstName);
 }

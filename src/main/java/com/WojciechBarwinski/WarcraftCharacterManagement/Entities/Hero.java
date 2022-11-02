@@ -17,7 +17,7 @@ import java.util.Set;
 public class Hero {
 
         @Id
-        @Setter(AccessLevel.NONE)
+        //@Setter(AccessLevel.NONE)
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 

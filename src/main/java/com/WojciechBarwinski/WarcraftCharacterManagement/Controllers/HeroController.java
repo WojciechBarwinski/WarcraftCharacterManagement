@@ -1,13 +1,16 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Controllers;
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTO;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Hero;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Services.HeroService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController()
@@ -32,11 +35,32 @@ public class HeroController {
         return heroService.getHeroById(id);
     }
 
-    @PostMapping("/put")
-    public ResponseEntity<HeroDTO> addNewHero(@RequestBody HeroDTO heroDTO){
-        heroService.addHero(heroDTO);
-        HeroDTO createdHero = heroService.getHeroByFirstName(heroDTO.getFirstName());
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdHero);
+    @ApiOperation(value = "Get a hero by first name", notes = "Returns hero as per name")
+    @GetMapping()
+    public HeroDTO getHeroByName(@RequestParam(value="name") String name){
+        return heroService.getHeroByFirstName(name);
     }
 
+
+    @ApiOperation(value = "Create a new hero", notes = "Returns url and json with to new created hero")
+    @PostMapping("/post")
+    public ResponseEntity<HeroDTO> addNewHero(@RequestBody HeroDTO heroDTO){
+        HeroDTO newHeroDTO = heroService.createNewHero(heroDTO);
+
+        return getCorrectURILocation(newHeroDTO);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<HeroDTO> updateHero(@PathVariable Long id ,@RequestBody HeroDTO heroDTO){
+        HeroDTO newHeroDTO = heroService.updateHero(heroDTO, id);
+        return getCorrectURILocation(newHeroDTO);
+    }
+
+    private ResponseEntity<HeroDTO> getCorrectURILocation(HeroDTO heroDTO){
+        URI location = ServletUriComponentsBuilder.fromCurrentServletMapping()
+                .path("/heroes/{id}")
+                .buildAndExpand(heroDTO.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(heroDTO);
+    }
 }

@@ -1,0 +1,12 @@
+{
+  "books": [
+    "string"
+  ],
+  "firstName": "Malfurion",
+  "fractions": [
+    "string"
+  ],
+  "id": 0,
+  "lastName": "Stormrage",
+  "race": "Night Elf"
+}

@@ -3,8 +3,10 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Services;
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Hero;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Race;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.HeroNotFoundException;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.RaceNotFoundException;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.UpdateConflictException;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.HeroRepository;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.RaceRepository;
 import org.springframework.data.domain.PageRequest;
@@ -52,17 +54,40 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public HeroDTO getHeroByFirstName(String firstName) {
-        return mapHeroToHeroDTO(heroRepository.findByFirstName(firstName));
+        Optional<Hero> hero = heroRepository.findByFirstName(firstName);
+        if (hero.isEmpty()){
+            throw new HeroNotFoundException("nie znaleziono postaci o first name=" + firstName);
+        }
+        return mapHeroToHeroDTO(hero.get());
     }
 
     @Override
-    public void addHero(HeroDTO heroDTO) {
-        //Hero save = heroRepository.save(mapHeroDTOToHero(hero));
+    public HeroDTO createNewHero(HeroDTO heroDTO) {
         Hero hero = mapHeroDTOToHero(heroDTO);
-        hero.setRace(raceRepository.findByName(heroDTO.getRace())
-                .orElseThrow(() -> new RaceNotFoundException(heroDTO.getRace() + " -> this race doesn't exist")));
+        hero.setRace(checkRace(heroDTO.getRace()));
 
-        heroRepository.save(hero);
+        return mapHeroToHeroDTO(heroRepository.save(hero));
     }
 
+    @Override
+    public HeroDTO updateHero(HeroDTO heroDTO, Long id) {
+        if (!heroDTO.getId().equals(id)){
+            throw new UpdateConflictException("Hero ID in JSON=" + heroDTO.getId() + " is incorrect with the path ID=" + id + " Don't change hero ID");
+        }
+
+        if (heroRepository.findById(id).isEmpty()){
+            throw new HeroNotFoundException("There is no hero with id=" + id);
+        }
+
+        Hero hero = mapHeroDTOToHero(heroDTO);
+        hero.setRace(checkRace(heroDTO.getRace()));
+
+        return mapHeroToHeroDTO(heroRepository.save(hero));
+    }
+
+    //TODO zła nazwa
+    private Race checkRace(String raceName){
+        return raceRepository.findByName(raceName)
+                .orElseThrow(() -> new RaceNotFoundException(raceName + " -> this race doesn't exist"));
+    }
 }
