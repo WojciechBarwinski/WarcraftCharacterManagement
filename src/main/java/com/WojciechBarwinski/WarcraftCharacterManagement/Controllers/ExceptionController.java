@@ -1,7 +1,7 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Controllers;
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.HeroNotFoundException;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.RaceNotFoundException;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ResourceNotFoundException;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.UpdateConflictException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,7 +20,7 @@ public class ExceptionController {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(RaceNotFoundException.class)
+    @ExceptionHandler(ResourceNotFoundException.class)
     public String raceNotFound(Exception e){
         return e.getMessage();
     }

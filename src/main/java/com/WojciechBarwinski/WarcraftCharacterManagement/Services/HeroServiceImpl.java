@@ -2,36 +2,42 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Services;
 
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTO;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Book;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Fraction;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Hero;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Race;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.HeroNotFoundException;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.RaceNotFoundException;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.UpdateConflictException;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ResourceNotFoundException;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.BookRepository;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.FractionRepository;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.HeroRepository;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.RaceRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper.mapDTOToHero;
-import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper.mapHeroToDTO;
+import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper.*;
 
 @Service
 public class HeroServiceImpl implements HeroService {
 
     HeroRepository heroRepository;
     RaceRepository raceRepository;
+    FractionRepository fractionRepository;
+    BookRepository bookRepository;
     private static final int PAGE_SIZE = 5;
 
 
     public HeroServiceImpl(HeroRepository heroRepository,
-                           RaceRepository raceRepository) {
+                           RaceRepository raceRepository,
+                           FractionRepository fractionRepository,
+                           BookRepository bookRepository) {
         this.heroRepository = heroRepository;
         this.raceRepository = raceRepository;
+        this.fractionRepository = fractionRepository;
+        this.bookRepository = bookRepository;
     }
 
     public List<HeroDTO> getAllHeroes(int page, Sort.Direction direction){
@@ -63,7 +69,7 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public HeroDTO createNewHero(HeroDTO heroDTO) {
-        Hero hero = mapDTOToHero(heroDTO);
+        Hero hero = mapDTOToNewHero(heroDTO);
         hero.setRace(checkRace(heroDTO.getRace()));
 
         return mapHeroToDTO(heroRepository.save(hero));
@@ -71,23 +77,42 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public HeroDTO updateHero(HeroDTO heroDTO, Long id) {
-        if (!heroDTO.getId().equals(id)){
-            throw new UpdateConflictException("Hero ID in JSON=" + heroDTO.getId() + " is incorrect with the path ID=" + id + " Don't change hero ID");
-        }
 
         if (heroRepository.findById(id).isEmpty()){
-            throw new HeroNotFoundException("There is no hero with id=" + id);
-        }
-
-        Hero hero = mapDTOToHero(heroDTO);
+                throw new HeroNotFoundException("There is no hero with id=" + id);
+            }
+        Hero hero = mapDTOToHero(heroDTO, id);
         hero.setRace(checkRace(heroDTO.getRace()));
+        hero.setFractions(checkFraction(heroDTO.getFractions()));
+        hero.setBooks(checkBook(heroDTO.getBooks()));
 
-        return mapHeroToDTO(heroRepository.save(hero));
+        heroRepository.saveAndFlush(hero);
+
+        Hero hero1 = heroRepository.findById(id).get();
+        return mapHeroToDTO(hero1);
     }
 
     //TODO zła nazwa
     private Race checkRace(String raceName){
         return raceRepository.findByName(raceName)
-                .orElseThrow(() -> new RaceNotFoundException(raceName + " -> this race doesn't exist"));
+                .orElseThrow(() -> new ResourceNotFoundException(raceName + " -> this race doesn't exist"));
+    }
+
+    private Set<Fraction> checkFraction(Set<String> fractionSet){
+        Set<Fraction> fractions = new HashSet<>();
+        for (String fraction : fractionSet) {
+            fractions.add(fractionRepository.findByName(fraction)
+                    .orElseThrow(() -> new ResourceNotFoundException(fraction + " -> this fraction doesn't exist")));
+        }
+        return fractions;
+    }
+
+    private Set<Book> checkBook(Set<String> bookSet){
+        Set<Book> books = new HashSet<>();
+        for (String book : bookSet) {
+            books.add(bookRepository.findByTitle(book)
+                    .orElseThrow(() -> new ResourceNotFoundException(book + " -> this book doesn't exist")));
+        }
+        return books;
     }
 }

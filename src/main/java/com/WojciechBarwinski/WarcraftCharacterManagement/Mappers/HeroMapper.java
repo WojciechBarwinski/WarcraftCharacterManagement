@@ -26,18 +26,24 @@ public class HeroMapper {
                 .build();
     }
 
-    public static Hero mapDTOToHero(HeroDTO DTO){
-        Hero newHero = new Hero();
-        newHero.setFirstName(DTO.getFirstName());
-        newHero.setLastName(DTO.getLastName());
-        newHero.setTitles(DTO.getTitles());
+    public static Hero mapDTOToHero(HeroDTO DTO, Long id){
 
-        if (DTO.getId() != null){
-            newHero.setId(DTO.getId());
-        }
-        return newHero;
+        return Hero.builder()
+                .id(id)
+                .firstName(DTO.getFirstName())
+                .lastName(DTO.getLastName())
+                .titles(DTO.getTitles())
+                .build();
     }
 
+    public static Hero mapDTOToNewHero(HeroDTO DTO){
+
+        return Hero.builder()
+                .firstName(DTO.getFirstName())
+                .lastName(DTO.getLastName())
+                .titles(DTO.getTitles())
+                .build();
+    }
     private static Set<String> mapFactions(Set<Fraction> fractions){
         Set<String> mappedFractions = new HashSet<>();
         for (Fraction fraction : fractions) {

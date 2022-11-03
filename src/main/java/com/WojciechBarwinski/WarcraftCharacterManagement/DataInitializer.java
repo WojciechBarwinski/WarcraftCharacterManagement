@@ -68,10 +68,10 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         alinya.setRace(raceRepository.findByName("Night Elf").get());
         thrall.setRace(raceRepository.findByName("Orc").get());
 
-        Fraction elune = fractionRepository.findByName("Sisterhood of Elune");
-        Fraction horde = fractionRepository.findByName("Horde");
-        Fraction alliance = fractionRepository.findByName("Alliance");
-        Fraction forsaken = fractionRepository.findByName("Forsaken");
+        Fraction elune = fractionRepository.findByName("Sisterhood of Elune").get();
+        Fraction horde = fractionRepository.findByName("Horde").get();
+        Fraction alliance = fractionRepository.findByName("Alliance").get();
+        Fraction forsaken = fractionRepository.findByName("Forsaken").get();
 
         placeRepository.findByName("Kalimdor").setUpperLocation(placeRepository.findByName("Azeroth"));
         placeRepository.findByName("Tendrasill").setUpperLocation(placeRepository.findByName("Kalimdor"));
