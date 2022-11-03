@@ -10,3 +10,17 @@
   "lastName": "Stormrage",
   "race": "Night Elf"
 }
+
+{
+  "id": 1,
+  "firstName": "Sylvanas",
+  "lastName": "biezywiatr",
+  "race": "Undead",
+  "fractions": [
+    "Horde",
+    "Forsaken"
+  ],
+  "books": [
+    "Sylvanas"
+  ]
+}

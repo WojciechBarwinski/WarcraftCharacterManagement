@@ -26,8 +26,8 @@ public class Hero {
 
         @ElementCollection
         @CollectionTable(name = "hero_title")
-        @Column(name = "title")
-        private List<String> titles = new ArrayList<>();
+        @Column(name = "titles")
+        private Set<String> titles;
 
         @ManyToOne
         private Race race;
@@ -45,7 +45,7 @@ public class Hero {
 
         public void addTitle(String newTitle) {
                 if (titles == null){
-                        titles = new ArrayList<>();
+                        titles = new HashSet<>();
                 }
                 titles.add(newTitle);
         }

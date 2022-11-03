@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper.mapHeroDTOToHero;
-import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper.mapHeroToHeroDTO;
+import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper.mapDTOToHero;
+import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper.mapHeroToDTO;
 
 @Service
 public class HeroServiceImpl implements HeroService {
@@ -37,7 +37,7 @@ public class HeroServiceImpl implements HeroService {
     public List<HeroDTO> getAllHeroes(int page, Sort.Direction direction){
         List<HeroDTO> heroesDTO = new ArrayList<>();
         for (Hero hero : heroRepository.findAllHeroes(PageRequest.of(page, PAGE_SIZE, Sort.by(direction, "firstName")))) {
-            heroesDTO.add(mapHeroToHeroDTO(hero));
+            heroesDTO.add(mapHeroToDTO(hero));
         }
         return heroesDTO;
     }
@@ -49,7 +49,7 @@ public class HeroServiceImpl implements HeroService {
         if (hero.isEmpty()){
             throw new HeroNotFoundException("nie znaleziono postaci o id=" + id);
         }
-        return mapHeroToHeroDTO(hero.get());
+        return mapHeroToDTO(hero.get());
     }
 
     @Override
@@ -58,15 +58,15 @@ public class HeroServiceImpl implements HeroService {
         if (hero.isEmpty()){
             throw new HeroNotFoundException("nie znaleziono postaci o first name=" + firstName);
         }
-        return mapHeroToHeroDTO(hero.get());
+        return mapHeroToDTO(hero.get());
     }
 
     @Override
     public HeroDTO createNewHero(HeroDTO heroDTO) {
-        Hero hero = mapHeroDTOToHero(heroDTO);
+        Hero hero = mapDTOToHero(heroDTO);
         hero.setRace(checkRace(heroDTO.getRace()));
 
-        return mapHeroToHeroDTO(heroRepository.save(hero));
+        return mapHeroToDTO(heroRepository.save(hero));
     }
 
     @Override
@@ -79,10 +79,10 @@ public class HeroServiceImpl implements HeroService {
             throw new HeroNotFoundException("There is no hero with id=" + id);
         }
 
-        Hero hero = mapHeroDTOToHero(heroDTO);
+        Hero hero = mapDTOToHero(heroDTO);
         hero.setRace(checkRace(heroDTO.getRace()));
 
-        return mapHeroToHeroDTO(heroRepository.save(hero));
+        return mapHeroToDTO(heroRepository.save(hero));
     }
 
     //TODO zła nazwa

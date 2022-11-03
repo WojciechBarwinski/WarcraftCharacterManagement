@@ -9,34 +9,35 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-//TODO dodac buildera i przerefactorować
 public class HeroMapper {
 
     private HeroMapper() {
     }
 
-    public static HeroDTO mapHeroToHeroDTO(Hero hero){
-        HeroDTO heroDTO = new HeroDTO();
-        heroDTO.setId(hero.getId());
-        heroDTO.setFirstName(hero.getFirstName());
-        heroDTO.setLastName(hero.getLastName());
-        heroDTO.setRace(hero.getRace().getName());
-        heroDTO.setFractions(mapFactions(hero.getFractions()));
-        heroDTO.setBooks(mapBooks(hero.getBooks()));
-
-        return heroDTO;
+    public static HeroDTO mapHeroToDTO(Hero hero){
+        return HeroDTO.builder()
+                .id(hero.getId())
+                .firstName(hero.getFirstName())
+                .lastName(hero.getLastName())
+                .titles(hero.getTitles())
+                .race(hero.getRace().getName())
+                .fractions(mapFactions(hero.getFractions()))
+                .books(mapBooks(hero.getBooks()))
+                .build();
     }
 
-    public static Hero mapHeroDTOToHero(HeroDTO heroDTO){
+    public static Hero mapDTOToHero(HeroDTO DTO){
         Hero newHero = new Hero();
-        newHero.setFirstName(heroDTO.getFirstName());
-        newHero.setLastName(heroDTO.getLastName());
+        newHero.setFirstName(DTO.getFirstName());
+        newHero.setLastName(DTO.getLastName());
+        newHero.setTitles(DTO.getTitles());
 
-        if (heroDTO.getId() != null){
-            newHero.setId(heroDTO.getId());
+        if (DTO.getId() != null){
+            newHero.setId(DTO.getId());
         }
         return newHero;
     }
+
     private static Set<String> mapFactions(Set<Fraction> fractions){
         Set<String> mappedFractions = new HashSet<>();
         for (Fraction fraction : fractions) {
@@ -44,7 +45,6 @@ public class HeroMapper {
         }
         return mappedFractions;
     }
-
     private static Set<String> mapBooks(Set<Book> books){
         Set<String> mappedBooks = new HashSet<>();
         for (Book book : books) {

@@ -5,11 +5,8 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
 public class HeroDTO {
 
     private Long id;
@@ -18,4 +15,5 @@ public class HeroDTO {
     private String race;
     private Set<String> fractions = new HashSet<>();
     private Set<String> books = new HashSet<>();
+    private Set<String> titles = new HashSet<>();
 }

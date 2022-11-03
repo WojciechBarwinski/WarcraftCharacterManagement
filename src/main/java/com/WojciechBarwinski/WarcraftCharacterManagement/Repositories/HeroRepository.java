@@ -15,7 +15,30 @@ public interface HeroRepository extends JpaRepository<Hero, Long> {
     @Query("SELECT h FROM Hero h " +
             "LEFT JOIN FETCH h.books " +
             "JOIN FETCH h.race " +
-            "LEFT JOIN FETCH h.fractions")
+            "LEFT JOIN FETCH h.fractions " +
+            "LEFT JOIN FETCH h.titles")
     List<Hero> findAllHeroes(Pageable page);
+
+    @Query("SELECT h FROM Hero h " +
+            "LEFT JOIN FETCH h.books " +
+            "LEFT JOIN FETCH h.race " +
+            "LEFT JOIN FETCH h.fractions " +
+            "LEFT JOIN FETCH h.titles " +
+            "WHERE h.id = ?1")
+    @Override
+    Optional<Hero> findById(Long id);
+
+    @Query("SELECT h FROM Hero h " +
+            "LEFT JOIN FETCH h.books " +
+            "LEFT JOIN FETCH h.race " +
+            "LEFT JOIN FETCH h.fractions " +
+            "LEFT JOIN FETCH h.titles " +
+            "WHERE h.firstName = ?1")
     Optional<Hero> findByFirstName(String firstName);
 }
+
+
+/*
+    @Modifying
+    @Query("update User u set u.firstname = ?1, u.lastname = ?2 where u.id = ?3")
+    void setUserInfoById(String firstname, String lastname, Integer userId);*/
