@@ -1,11 +1,9 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Controllers;
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTO;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Hero;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Services.HeroService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -50,6 +48,7 @@ public class HeroController {
         return getCorrectURILocation(newHeroDTO);
     }
 
+    @ApiOperation(value = "Update a hero, need only new information", notes = "Returns url and json with to updated hero")
     @PutMapping("/{id}")
     public ResponseEntity<HeroDTO> updateHero(@PathVariable Long id ,@RequestBody HeroDTO heroDTO){
         HeroDTO newHeroDTO = heroService.updateHero(heroDTO, id);

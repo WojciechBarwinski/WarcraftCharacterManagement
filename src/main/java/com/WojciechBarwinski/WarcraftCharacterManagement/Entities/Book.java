@@ -4,7 +4,6 @@ import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -31,19 +30,11 @@ public class Book {
     @ManyToOne(fetch = FetchType.LAZY)
     private Author author;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "hero_book",
-            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "hero_id", referencedColumnName = "id"))
+    @ManyToMany(mappedBy = "books", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Hero> heroes = new java.util.LinkedHashSet<>();
 
     public Book(String title, String description) {
         this.title = title;
         this.description = description;
-    }
-
-    public void addHeroToBook(Hero hero){
-        heroes.add(hero);
     }
 }

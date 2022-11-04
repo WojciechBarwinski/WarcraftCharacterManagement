@@ -77,15 +77,15 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         placeRepository.findByName("Tendrasill").setUpperLocation(placeRepository.findByName("Kalimdor"));
         placeRepository.findByName("Durotar").setUpperLocation(placeRepository.findByName("Kalimdor"));
 
-        elune.addHeroToFraction(tyrande);
-        elune.addHeroToFraction(alinya);
-        elune.addHeroToFraction(shandris);
-        horde.addHeroToFraction(thrall);
-        horde.addHeroToFraction(sylvanas);
-        alliance.addHeroToFraction(tyrande);
-        alliance.addHeroToFraction(alinya);
-        alliance.addHeroToFraction(shandris);
-        forsaken.addHeroToFraction(sylvanas);
+        tyrande.addFraction(elune);
+        tyrande.addFraction(alliance);
+        shandris.addFraction(elune);
+        shandris.addFraction(alliance);
+        alinya.addFraction(elune);
+        thrall.addFraction(horde);
+        sylvanas.addFraction(horde);
+        sylvanas.addFraction(forsaken);
+
 
         tyrande.addTitle("aaaa");
         tyrande.addTitle("bbb");
@@ -99,16 +99,15 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         Book sylv = bookRepository.findById(3L).get();
 
         tWoE.setAuthor(authorRepository.findById(1L).get());
-        tWoE.addHeroToBook(tyrande);
-        tWoE.addHeroToBook(shandris);
-
         tDS.setAuthor(authorRepository.findById(1L).get());
-        tDS.addHeroToBook(tyrande);
-
         sylv.setAuthor(authorRepository.findById(2L).get());
-        sylv.addHeroToBook(sylvanas);
-        sylv.addHeroToBook(thrall);
-        sylv.addHeroToBook(tyrande);
+
+        tyrande.addBook(tWoE);
+        tyrande.addBook(tDS);
+        shandris.addBook(tWoE);
+        shandris.addBook(tDS);
+        sylvanas.addBook(sylv);
+        thrall.addBook(sylv);
 
         relationService.addTwoDirectionsRelation(tyrande.getId(), shandris.getId(), "przybrana córka", "przybrana matka");
 

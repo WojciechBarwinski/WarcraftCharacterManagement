@@ -35,10 +35,6 @@ public interface HeroRepository extends JpaRepository<Hero, Long> {
             "LEFT JOIN FETCH h.titles " +
             "WHERE h.firstName = ?1")
     Optional<Hero> findByFirstName(String firstName);
+
 }
 
-
-/*
-    @Modifying
-    @Query("update User u set u.firstname = ?1, u.lastname = ?2 where u.id = ?3")
-    void setUserInfoById(String firstname, String lastname, Integer userId);*/

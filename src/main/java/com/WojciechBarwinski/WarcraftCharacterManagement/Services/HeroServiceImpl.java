@@ -69,6 +69,8 @@ public class HeroServiceImpl implements HeroService {
         return mapHeroToDTO(hero.get());
     }
 
+
+    //SPRAWDZIC optymlizacje
     @Transactional
     @Override
     public HeroDTO createNewHero(HeroDTO heroDTO) {
@@ -77,8 +79,6 @@ public class HeroServiceImpl implements HeroService {
         hero.setFractions(checkFraction(heroDTO.getFractions()));
         hero.setBooks(checkBook(heroDTO.getBooks()));
         Hero save = heroRepository.save(hero);
-        //bookRepository.saveAll(save.getBooks());
-        //fractionRepository.saveAll(save.getFractions());
 
         return mapHeroToDTO(save);
     }
@@ -87,18 +87,10 @@ public class HeroServiceImpl implements HeroService {
     @Override
     public HeroDTO updateHero(HeroDTO heroDTO, Long id) {
         Hero hero = jeszczeNieWiem(heroDTO, id);
-        bookUpdate(hero);
         return mapHeroToDTO(heroRepository.save(hero));
     }
 
-    private void bookUpdate(Hero hero) {
-        for (Book book : hero.getBooks()) {
-            book.addHeroToBook(hero);
-        }
-        Set<Book> books = hero.getBooks();
-        bookRepository.saveAll(books);
-    }
-
+    //TODO NAZWA!!
     private Hero jeszczeNieWiem(HeroDTO dto, Long id){
         Hero heroToUpdate = new Hero();
         Hero heroFromDB = heroRepository.findById(id)

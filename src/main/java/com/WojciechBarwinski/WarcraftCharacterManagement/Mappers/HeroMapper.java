@@ -26,18 +26,7 @@ public class HeroMapper {
                 .build();
     }
 
-    public static Hero mapDTOToHero(HeroDTO DTO){
-
-        return Hero.builder()
-                .id(DTO.getId())
-                .firstName(DTO.getFirstName())
-                .lastName(DTO.getLastName())
-                .titles(DTO.getTitles())
-                .build();
-    }
-
     public static Hero mapDTOToNewHero(HeroDTO DTO){
-
         return Hero.builder()
                 .firstName(DTO.getFirstName())
                 .lastName(DTO.getLastName())
