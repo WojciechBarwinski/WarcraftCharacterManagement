@@ -15,8 +15,10 @@ import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.RaceReposi
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper.*;
 
@@ -67,52 +69,127 @@ public class HeroServiceImpl implements HeroService {
         return mapHeroToDTO(hero.get());
     }
 
+    @Transactional
     @Override
     public HeroDTO createNewHero(HeroDTO heroDTO) {
         Hero hero = mapDTOToNewHero(heroDTO);
         hero.setRace(checkRace(heroDTO.getRace()));
+        hero.setFractions(checkFraction(heroDTO.getFractions()));
+        hero.setBooks(checkBook(heroDTO.getBooks()));
+        Hero save = heroRepository.save(hero);
+        //bookRepository.saveAll(save.getBooks());
+        //fractionRepository.saveAll(save.getFractions());
 
+        return mapHeroToDTO(save);
+    }
+
+    @Transactional
+    @Override
+    public HeroDTO updateHero(HeroDTO heroDTO, Long id) {
+        Hero hero = jeszczeNieWiem(heroDTO, id);
+        bookUpdate(hero);
         return mapHeroToDTO(heroRepository.save(hero));
     }
 
-    @Override
-    public HeroDTO updateHero(HeroDTO heroDTO, Long id) {
-
-        if (heroRepository.findById(id).isEmpty()){
-                throw new HeroNotFoundException("There is no hero with id=" + id);
-            }
-        Hero hero = mapDTOToHero(heroDTO, id);
-        hero.setRace(checkRace(heroDTO.getRace()));
-        hero.setFractions(checkFraction(heroDTO.getFractions()));
-        hero.setBooks(checkBook(heroDTO.getBooks()));
-
-        heroRepository.saveAndFlush(hero);
-
-        Hero hero1 = heroRepository.findById(id).get();
-        return mapHeroToDTO(hero1);
+    private void bookUpdate(Hero hero) {
+        for (Book book : hero.getBooks()) {
+            book.addHeroToBook(hero);
+        }
+        Set<Book> books = hero.getBooks();
+        bookRepository.saveAll(books);
     }
 
-    //TODO zła nazwa
+    private Hero jeszczeNieWiem(HeroDTO dto, Long id){
+        Hero heroToUpdate = new Hero();
+        Hero heroFromDB = heroRepository.findById(id)
+                .orElseThrow(() ->new HeroNotFoundException("There is no hero with id=" + id));
+
+        heroToUpdate.setId(id);
+
+        if (dto.getFirstName() == null){
+            heroToUpdate.setFirstName(heroFromDB.getFirstName());
+        } else {
+            heroToUpdate.setFirstName(dto.getFirstName());
+        }
+
+        if (dto.getLastName() == null){
+            heroToUpdate.setLastName(heroFromDB.getLastName());
+        } else {
+            heroToUpdate.setLastName(dto.getLastName());
+        }
+
+        if (dto.getTitles().isEmpty()){
+            heroToUpdate.setTitles(heroFromDB.getTitles());
+        } else {
+            heroToUpdate.setTitles(dto.getTitles());
+        }
+
+        if (dto.getRace() == null){
+            heroToUpdate.setRace(heroFromDB.getRace());
+        } else {
+            heroToUpdate.setRace(checkRace(dto.getRace()));
+        }
+
+        if (dto.getFractions().isEmpty()){
+            heroToUpdate.setFractions(heroFromDB.getFractions());
+        } else {
+            heroToUpdate.setFractions(checkFraction(dto.getFractions()));
+        }
+
+        if (dto.getBooks().isEmpty()){
+            heroToUpdate.setBooks(heroFromDB.getBooks());
+        } else {
+            heroToUpdate.setBooks(checkBook(dto.getBooks()));
+        }
+
+        return heroToUpdate;
+    }
+
     private Race checkRace(String raceName){
         return raceRepository.findByName(raceName)
                 .orElseThrow(() -> new ResourceNotFoundException(raceName + " -> this race doesn't exist"));
     }
 
-    private Set<Fraction> checkFraction(Set<String> fractionSet){
-        Set<Fraction> fractions = new HashSet<>();
-        for (String fraction : fractionSet) {
-            fractions.add(fractionRepository.findByName(fraction)
-                    .orElseThrow(() -> new ResourceNotFoundException(fraction + " -> this fraction doesn't exist")));
+    private Set<Fraction> checkFraction(Set<String> fractionsName){
+        Set<Fraction> fractions = fractionRepository.findByNames(fractionsName);
+
+        if (fractionsName.size()!=fractions.size()){
+            throwExceptionWithIncorrectFractionsName(fractionsName, fractions);
         }
         return fractions;
     }
 
-    private Set<Book> checkBook(Set<String> bookSet){
-        Set<Book> books = new HashSet<>();
-        for (String book : bookSet) {
-            books.add(bookRepository.findByTitle(book)
-                    .orElseThrow(() -> new ResourceNotFoundException(book + " -> this book doesn't exist")));
+    private Set<Book> checkBook(Set<String> booksTitles){
+        Set<Book> books = bookRepository.findByTitles(booksTitles);
+
+        if (booksTitles.size()!=books.size()){
+            throwExceptionWithIncorrectBooksTitles(booksTitles, books);
         }
         return books;
     }
+
+    private void throwExceptionWithIncorrectFractionsName(Set<String> names, Set<Fraction> fractions){
+        Set<String> collect = fractions.stream()
+                .map(Fraction::getName).collect(Collectors.toSet());
+        names.removeAll(collect);
+
+        throw new ResourceNotFoundException(stringWithIncorrectNames(names) + " -> this fraction/s doesn't exist");
+    }
+
+    private void throwExceptionWithIncorrectBooksTitles(Set<String> names, Set<Book> fractions){
+        Set<String> collect = fractions.stream()
+                .map(Book::getTitle).collect(Collectors.toSet());
+        names.removeAll(collect);
+
+        throw new ResourceNotFoundException(stringWithIncorrectNames(names) + " -> this fraction/s doesn't exist");
+    }
+
+    private String stringWithIncorrectNames(Set<String> names){
+        StringBuilder message = new StringBuilder();
+        for (String s : names) {
+            message.append(s).append(" ");
+        }
+        return message.toString();
+    }
+
 }

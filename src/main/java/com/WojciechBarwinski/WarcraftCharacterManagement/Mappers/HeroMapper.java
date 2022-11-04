@@ -26,10 +26,10 @@ public class HeroMapper {
                 .build();
     }
 
-    public static Hero mapDTOToHero(HeroDTO DTO, Long id){
+    public static Hero mapDTOToHero(HeroDTO DTO){
 
         return Hero.builder()
-                .id(id)
+                .id(DTO.getId())
                 .firstName(DTO.getFirstName())
                 .lastName(DTO.getLastName())
                 .titles(DTO.getTitles())
@@ -44,6 +44,7 @@ public class HeroMapper {
                 .titles(DTO.getTitles())
                 .build();
     }
+
     private static Set<String> mapFactions(Set<Fraction> fractions){
         Set<String> mappedFractions = new HashSet<>();
         for (Fraction fraction : fractions) {
@@ -51,6 +52,7 @@ public class HeroMapper {
         }
         return mappedFractions;
     }
+
     private static Set<String> mapBooks(Set<Book> books){
         Set<String> mappedBooks = new HashSet<>();
         for (Book book : books) {

@@ -1,21 +1,24 @@
 {
   "books": [
-    "string"
+    "The Well of Eternity",
+    "The Demon Soul"
   ],
   "firstName": "Malfurion",
   "fractions": [
-    "string"
+    "Alliance"
   ],
   "id": 0,
   "lastName": "Stormrage",
-  "race": "Night Elf"
+  "race": "Night Elf",
+  "titles": [
+      "archdruid",
+      "brodacz"
+    ]
 }
 
 {
   "id": 1,
-  "firstName": "Sylvanas",
-  "lastName": "Windrunner",
-  "race": "Undead",
+  "lastName": "bbbbb",
   "fractions": [
     "Horde",
     "Forsaken"

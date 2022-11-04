@@ -31,12 +31,12 @@ public class Book {
     @ManyToOne(fetch = FetchType.LAZY)
     private Author author;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "hero_book",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "hero_id"))
-    private Set<Hero> heroes = new HashSet<>();
+            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "hero_id", referencedColumnName = "id"))
+    private Set<Hero> heroes = new java.util.LinkedHashSet<>();
 
     public Book(String title, String description) {
         this.title = title;

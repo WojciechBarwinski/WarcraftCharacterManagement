@@ -25,12 +25,11 @@ public class Fraction {
     @Lob
     private String description;
 
-    @ManyToMany
-    @JoinTable(
-            name = "hero_fraction",
-            joinColumns = @JoinColumn(name = "fraction_id"),
-            inverseJoinColumns = @JoinColumn(name = "hero_id"))
-    private Set<Hero> heroes = new HashSet<>();
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "hero_fraction",
+            joinColumns = @JoinColumn(name = "fraction_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "hero_id", referencedColumnName = "id"))
+    private Set<Hero> heroes = new java.util.LinkedHashSet<>();
 
 
 

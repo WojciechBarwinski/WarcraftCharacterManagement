@@ -7,6 +7,9 @@ import java.util.Set;
 
 @Builder
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class HeroDTO {
 
     private Long id;

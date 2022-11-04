@@ -33,11 +33,11 @@ public class Hero {
         @ManyToOne
         private Race race;
 
-        @ManyToMany(mappedBy = "heroes")
-        private Set<Fraction> fractions = new HashSet<>();
+        @ManyToMany(mappedBy = "heroes", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+        private Set<Fraction> fractions = new java.util.LinkedHashSet<>();
 
-        @ManyToMany(mappedBy = "heroes")
-        private Set<Book> books = new HashSet<>();
+        @ManyToMany(mappedBy = "heroes", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+        private Set<Book> books = new java.util.LinkedHashSet<>();
 
         public Hero(String firstName, String lastName) {
                 this.firstName = firstName;
