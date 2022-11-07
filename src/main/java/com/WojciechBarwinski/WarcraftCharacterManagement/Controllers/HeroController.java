@@ -39,7 +39,6 @@ public class HeroController {
         return heroService.getHeroByFirstName(name);
     }
 
-
     @ApiOperation(value = "Create a new hero", notes = "Returns url and json with to new created hero")
     @PostMapping("/post")
     public ResponseEntity<HeroDTO> addNewHero(@RequestBody HeroDTO heroDTO){
@@ -53,6 +52,12 @@ public class HeroController {
     public ResponseEntity<HeroDTO> updateHero(@PathVariable Long id ,@RequestBody HeroDTO heroDTO){
         HeroDTO newHeroDTO = heroService.updateHero(heroDTO, id);
         return getCorrectURILocation(newHeroDTO);
+    }
+
+    @ApiOperation(value = "Delete hero by id", notes = "Return nothing")
+    @DeleteMapping("/{id}")
+    public void deleteHero(@PathVariable Long id){
+        heroService.deleteHero(id);
     }
 
     private ResponseEntity<HeroDTO> getCorrectURILocation(HeroDTO heroDTO){

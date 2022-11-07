@@ -53,10 +53,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         authorRepository.saveAll(createListOfAuthorsToAdd());
         bookRepository.saveAll(createListOfBooksToAdd());
 
-        Item bow = new Item();
-        Item sword = new Item();
-        bow.setDescription("jakiś tam opis luku");
-        sword.setDescription("jakis tam opis miecza");
+
         Hero sylvanas = heroRepository.findById(1L).get();
         Hero tyrande = heroRepository.findById(2L).get();
         Hero thrall = heroRepository.findById(3L).get();
@@ -109,10 +106,16 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         sylvanas.addBook(sylv);
         thrall.addBook(sylv);
 
-        relationService.addTwoDirectionsRelation(tyrande.getId(), shandris.getId(), "przybrana córka", "przybrana matka");
+        //relationService.addTwoDirectionsRelation(tyrande.getId(), shandris.getId(), "przybrana córka", "przybrana matka");
 
-        bow.setOwner(sylvanas);
-        sword.setOwner(tyrande);
+        Item bow = new Item();
+        Item sword = new Item();
+        bow.setDescription("jakiś tam opis luku");
+        sword.setDescription("jakis tam opis miecza");
+        sylvanas.addItem(bow);
+        tyrande.addItem(sword);
+        //bow.setOwner(sylvanas);
+        //sword.setOwner(tyrande);
         itemRepository.save(bow);
         itemRepository.save(sword);
     }

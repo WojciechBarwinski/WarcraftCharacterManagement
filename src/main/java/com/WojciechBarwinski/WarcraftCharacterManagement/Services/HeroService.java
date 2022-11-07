@@ -12,4 +12,6 @@ public interface HeroService {
     HeroDTO getHeroByFirstName(String firstName);
     HeroDTO createNewHero(HeroDTO hero);
     HeroDTO updateHero(HeroDTO hero, Long id);
+
+    void deleteHero(Long id);
 }

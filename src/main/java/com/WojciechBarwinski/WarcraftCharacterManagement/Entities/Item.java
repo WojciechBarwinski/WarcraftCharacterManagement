@@ -19,10 +19,14 @@ public class Item {
 
     private String name;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne
     private Hero owner;
 
     @Lob
     private String description;
 
+    public void setOwner(Hero owner) {
+        this.owner = owner;
+        //owner.addItem(this);
+    }
 }

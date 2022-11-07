@@ -30,7 +30,7 @@ public class Hero {
         @ManyToOne
         private Race race;
 
-        @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+        @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
         @JoinTable(name = "hero_fraction",
                 joinColumns = @JoinColumn(name = "hero_id", referencedColumnName = "id"),
                 inverseJoinColumns = @JoinColumn(name = "fraction_id", referencedColumnName = "id"))
@@ -41,6 +41,10 @@ public class Hero {
             joinColumns = @JoinColumn(name = "hero_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"))
         private Set<Book> books;
+
+
+        @OneToMany(mappedBy = "owner", orphanRemoval = true)
+        private Set<Item> items;
 
         public Hero(String firstName, String lastName) {
                 this.firstName = firstName;
@@ -66,5 +70,13 @@ public class Hero {
                         fractions = new HashSet<>();
                 }
                 fractions.add(fraction);
+        }
+
+        public void addItem(Item item){
+                if (items == null){
+                        items = new HashSet<>();
+                }
+                items.add(item);
+                item.setOwner(this);
         }
 }

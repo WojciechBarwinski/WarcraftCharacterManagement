@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper.*;
+import static com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Mappers.HeroMapper.*;
 
 @Service
 public class HeroServiceImpl implements HeroService {
@@ -69,7 +69,6 @@ public class HeroServiceImpl implements HeroService {
         return mapHeroToDTO(hero.get());
     }
 
-
     //SPRAWDZIC optymlizacje
     @Transactional
     @Override
@@ -88,6 +87,17 @@ public class HeroServiceImpl implements HeroService {
     public HeroDTO updateHero(HeroDTO heroDTO, Long id) {
         Hero hero = jeszczeNieWiem(heroDTO, id);
         return mapHeroToDTO(heroRepository.save(hero));
+    }
+
+    @Override
+    public void deleteHero(Long id) {
+        Optional<Hero> hero = heroRepository.findById(id);
+
+        if (hero.isEmpty()){
+            throw new HeroNotFoundException("nie znaleziono postaci o id=" + id);
+        }
+
+        heroRepository.deleteById(id);
     }
 
     //TODO NAZWA!!

@@ -1,4 +1,4 @@
-package com.WojciechBarwinski.WarcraftCharacterManagement.Mappers;
+package com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Mappers;
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Book;
