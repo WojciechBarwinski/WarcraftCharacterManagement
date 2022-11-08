@@ -13,10 +13,8 @@ import java.util.Optional;
 public interface HeroRepository extends JpaRepository<Hero, Long> {
 
     @Query("SELECT h FROM Hero h " +
-            "LEFT JOIN FETCH h.books " +
             "JOIN FETCH h.race " +
-            "LEFT JOIN FETCH h.fractions " +
-            "LEFT JOIN FETCH h.titles")
+            "LEFT JOIN FETCH h.fractions ")
     List<Hero> findAllHeroes(Pageable page);
 
     @Query("SELECT h FROM Hero h " +
@@ -24,6 +22,8 @@ public interface HeroRepository extends JpaRepository<Hero, Long> {
             "LEFT JOIN FETCH h.race " +
             "LEFT JOIN FETCH h.fractions " +
             "LEFT JOIN FETCH h.titles " +
+            "LEFT JOIN FETCH h.items " +
+            "LEFT JOIN FETCH h.ownRelations " +
             "WHERE h.id = ?1")
     @Override
     Optional<Hero> findById(Long id);

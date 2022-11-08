@@ -25,6 +25,11 @@ public class Item {
     @Lob
     private String description;
 
+    public Item(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public void setOwner(Hero owner) {
         this.owner = owner;
     }

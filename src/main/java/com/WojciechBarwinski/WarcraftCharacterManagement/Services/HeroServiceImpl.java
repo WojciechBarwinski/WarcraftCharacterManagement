@@ -2,6 +2,7 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Services;
 
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTO;
+import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTOToPreview;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Book;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Fraction;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Hero;
@@ -20,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Mappers.HeroMapper.*;
+import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper.*;
 
 @Service
 public class HeroServiceImpl implements HeroService {
@@ -42,10 +43,10 @@ public class HeroServiceImpl implements HeroService {
         this.bookRepository = bookRepository;
     }
 
-    public List<HeroDTO> getAllHeroes(int page, Sort.Direction direction){
-        List<HeroDTO> heroesDTO = new ArrayList<>();
+    public List<HeroDTOToPreview> getAllHeroes(int page, Sort.Direction direction){
+        List<HeroDTOToPreview> heroesDTO = new ArrayList<>();
         for (Hero hero : heroRepository.findAllHeroes(PageRequest.of(page, PAGE_SIZE, Sort.by(direction, "firstName")))) {
-            heroesDTO.add(mapHeroToDTO(hero));
+            heroesDTO.add(mapHeroToPreview(hero));
         }
         return heroesDTO;
     }

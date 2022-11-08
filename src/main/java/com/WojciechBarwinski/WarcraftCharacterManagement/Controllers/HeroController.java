@@ -1,6 +1,7 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Controllers;
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTO;
+import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTOToPreview;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Services.HeroService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Sort;
@@ -23,7 +24,7 @@ public class HeroController {
 
     @ApiOperation(value = "Get all heroes", notes = "Returns list with all heroes")
     @GetMapping("/")
-    public List<HeroDTO> getAllHero(@RequestParam int page, Sort.Direction direction){
+    public List<HeroDTOToPreview> getAllHero(@RequestParam int page, Sort.Direction direction){
         return heroService.getAllHeroes(page, direction);
     }
 

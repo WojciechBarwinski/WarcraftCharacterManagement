@@ -109,10 +109,8 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         relationService.addOneDirectionRelation(tyrande, shandris, "córka");
         relationService.addOneDirectionRelation(shandris, tyrande, "matka");
 
-        Item bow = new Item();
-        Item sword = new Item();
-        bow.setDescription("jakiś tam opis luku");
-        sword.setDescription("jakis tam opis miecza");
+        Item bow = new Item("bow", "jakiś tam opis luku");
+        Item sword = new Item("sword", "jakis tam opis miecza");
         sylvanas.addItem(bow);
         tyrande.addItem(sword);;
         itemRepository.save(bow);
