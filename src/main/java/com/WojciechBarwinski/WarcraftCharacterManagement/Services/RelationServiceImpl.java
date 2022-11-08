@@ -17,13 +17,13 @@ public class RelationServiceImpl implements RelationService {
 
 
     @Override
-    public void addOneDirectionRelation(Long hero1Id, Long hero2Id, String hero2ToHero1) {
-        relationRepository.save(new Relation(new RelationKey(hero1Id, hero2Id), hero2ToHero1));
+    public void addOneDirectionRelation(Hero hero1, Hero hero2, String hero2ToHero1) {
+        relationRepository.save(new Relation(new RelationKey(hero1, hero2), hero2ToHero1));
     }
 
-    @Override
+/*    @Override
     public void addTwoDirectionsRelation(Long hero1Id, Long hero2Id, String hero2ToHero1, String hero1ToHero2) {
         relationRepository.save(new Relation(new RelationKey(hero1Id, hero2Id), hero2ToHero1));
         relationRepository.save(new Relation(new RelationKey(hero2Id, hero1Id), hero1ToHero2));
-    }
+    }*/
 }

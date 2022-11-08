@@ -27,6 +27,5 @@ public class Item {
 
     public void setOwner(Hero owner) {
         this.owner = owner;
-        //owner.addItem(this);
     }
 }

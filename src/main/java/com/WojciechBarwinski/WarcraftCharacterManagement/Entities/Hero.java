@@ -42,9 +42,14 @@ public class Hero {
             inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"))
         private Set<Book> books;
 
-
         @OneToMany(mappedBy = "owner", orphanRemoval = true)
         private Set<Item> items;
+
+        @OneToMany(mappedBy = "key.owner", orphanRemoval = true)
+        private Set<Relation> ownRelations;
+
+        @OneToMany(mappedBy = "key.other", orphanRemoval = true)
+        private Set<Relation> relationsWithOthers;
 
         public Hero(String firstName, String lastName) {
                 this.firstName = firstName;

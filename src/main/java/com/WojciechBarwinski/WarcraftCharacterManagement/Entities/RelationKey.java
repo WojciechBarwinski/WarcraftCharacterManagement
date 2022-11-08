@@ -1,18 +1,22 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Entities;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Embeddable;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
 @Embeddable
+@Setter
+@Getter
 public class RelationKey implements Serializable {
 
-    private Long heroToHim;
-    private Long heroWith;
+    @ManyToOne
+    private Hero owner;
+
+    @ManyToOne
+    private Hero other;
 }

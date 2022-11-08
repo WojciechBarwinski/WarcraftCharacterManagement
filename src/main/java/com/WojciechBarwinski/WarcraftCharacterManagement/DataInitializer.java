@@ -106,16 +106,15 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         sylvanas.addBook(sylv);
         thrall.addBook(sylv);
 
-        //relationService.addTwoDirectionsRelation(tyrande.getId(), shandris.getId(), "przybrana córka", "przybrana matka");
+        relationService.addOneDirectionRelation(tyrande, shandris, "córka");
+        relationService.addOneDirectionRelation(shandris, tyrande, "matka");
 
         Item bow = new Item();
         Item sword = new Item();
         bow.setDescription("jakiś tam opis luku");
         sword.setDescription("jakis tam opis miecza");
         sylvanas.addItem(bow);
-        tyrande.addItem(sword);
-        //bow.setOwner(sylvanas);
-        //sword.setOwner(tyrande);
+        tyrande.addItem(sword);;
         itemRepository.save(bow);
         itemRepository.save(sword);
     }
