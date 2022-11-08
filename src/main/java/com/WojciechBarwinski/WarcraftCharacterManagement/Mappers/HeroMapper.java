@@ -47,6 +47,16 @@ public class HeroMapper {
                 .build();
     }
 
+    public static Map<String, String> mapRelations(Set<Relation> ownRelations) {
+        Map<String, String > relations = new HashMap<>();
+        if (ownRelations != null){
+            for (Relation relation : ownRelations) {
+                relations.put(relation.getKey().getOther().getFirstName(), relation.getDescription());
+            }
+        }
+        return relations;
+    }
+
     private static Set<String> mapFactions(Set<Fraction> fractions){
         Set<String> mappedFractions = new HashSet<>();
         for (Fraction fraction : fractions) {
@@ -65,17 +75,13 @@ public class HeroMapper {
 
     private static Set<String> mapItems(Set<Item> items) {
         Set<String> mappedItems = new HashSet<>();
-        for (Item item : items){
-            mappedItems.add(item.getName());
+        if (items != null){
+            for (Item item : items){
+                mappedItems.add(item.getName());
+            }
         }
         return mappedItems;
     }
 
-    private static Map<String, String> mapRelations(Set<Relation> ownRelations) {
-        Map<String, String > relations = new HashMap<>();
-        for (Relation relation : ownRelations) {
-            relations.put(relation.getKey().getOther().getFirstName(), relation.getDescription());
-        }
-        return relations;
-    }
+
 }

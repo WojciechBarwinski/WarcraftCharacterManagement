@@ -78,7 +78,7 @@ public class HeroServiceImpl implements HeroService {
         hero.setRace(checkRace(heroDTO.getRace()));
         hero.setFractions(checkFraction(heroDTO.getFractions()));
         hero.setBooks(checkBook(heroDTO.getBooks()));
-        Hero save = heroRepository.save(hero);
+        Hero save = heroRepository.saveAndFlush(hero);
 
         return mapHeroToDTO(save);
     }

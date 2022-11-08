@@ -3,8 +3,12 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Services;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Hero;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Relation;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.RelationKey;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.RelationRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class RelationServiceImpl implements RelationService {
@@ -21,9 +25,9 @@ public class RelationServiceImpl implements RelationService {
         relationRepository.save(new Relation(new RelationKey(hero1, hero2), hero2ToHero1));
     }
 
-/*    @Override
-    public void addTwoDirectionsRelation(Long hero1Id, Long hero2Id, String hero2ToHero1, String hero1ToHero2) {
-        relationRepository.save(new Relation(new RelationKey(hero1Id, hero2Id), hero2ToHero1));
-        relationRepository.save(new Relation(new RelationKey(hero2Id, hero1Id), hero1ToHero2));
-    }*/
+    @Override
+    public Map<String, String> allRelationByHero(Long id) {
+        Set<Relation> all = relationRepository.findByKey_OwnerId(id);
+        return HeroMapper.mapRelations(all);
+    }
 }
