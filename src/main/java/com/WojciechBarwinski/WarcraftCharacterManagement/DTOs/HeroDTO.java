@@ -22,5 +22,6 @@ public class HeroDTO {
     private Set<String> books = new HashSet<>();
     private Set<String> titles = new HashSet<>();
     private Set<String> items = new HashSet<>();
-    private Map<String, String> relations = new HashMap<>();
+    private Set<RelationDTO> relations = new HashSet<>();
+    //private Map<String, String> relations = new HashMap<>();
 }

@@ -2,6 +2,7 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Mappers;
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTOToPreview;
+import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.RelationDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.*;
 
 import java.util.HashMap;
@@ -47,11 +48,16 @@ public class HeroMapper {
                 .build();
     }
 
-    public static Map<String, String> mapRelations(Set<Relation> ownRelations) {
-        Map<String, String > relations = new HashMap<>();
+    public static Set<RelationDTO> mapRelations(Set<Relation> ownRelations) {
+        Set<RelationDTO> relations = new HashSet<>();
         if (ownRelations != null){
             for (Relation relation : ownRelations) {
-                relations.put(relation.getKey().getOther().getFirstName(), relation.getDescription());
+                relations.add(RelationDTO.builder()
+                                .heroId(relation.getKey().getOther().getId())
+                            .heroFirstName(relation.getKey().getOther().getFirstName())
+                            .heroLastName(relation.getKey().getOther().getLastName())
+                            .description(relation.getDescription())
+                            .build());
             }
         }
         return relations;

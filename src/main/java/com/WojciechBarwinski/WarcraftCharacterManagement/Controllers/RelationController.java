@@ -1,12 +1,14 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Controllers;
 
 
+import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.RelationDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Services.RelationService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Set;
 
 @RestController()
 @RequestMapping("/heroes/{heroId}/relations")
@@ -20,16 +22,16 @@ public class RelationController {
 
     @ApiOperation(value = "Create a new relations to hero", notes = "Need id other hero and description")
     @PostMapping()
-    public ResponseEntity<Map<String, String>> createNewRelation(@PathVariable Long heroId, Map<String, String> newRelation){
+    public Set<RelationDTO> createNewRelation(@PathVariable Long heroId, @RequestBody RelationDTO newRelation){
 
-        return null;
+        return relationService.addNewRelation(heroId, newRelation);
+
     }
 
-
+    @ApiOperation(value = "Read all relations of current hero", notes = "show all relations")
     @GetMapping()
-    public Map<String, String> readRelationOfHero(@PathVariable Long heroId){
-        Map<String, String> relation = relationService.allRelationByHero(heroId);
-        return relation;
+    public Set<RelationDTO> readRelationOfHero(@PathVariable Long heroId){
+        return relationService.allRelationByHero(heroId);
     }
 
 }

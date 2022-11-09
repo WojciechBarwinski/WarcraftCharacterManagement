@@ -36,5 +36,7 @@ public interface HeroRepository extends JpaRepository<Hero, Long> {
             "WHERE h.firstName = ?1")
     Optional<Hero> findByFirstName(String firstName);
 
+
+    boolean existsByFirstName(String firstName);
 }
 

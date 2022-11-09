@@ -53,21 +53,19 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public HeroDTO getHeroById(Long id) {
-        Optional<Hero> hero = heroRepository.findById(id);
-
-        if (hero.isEmpty()){
+        if (!heroRepository.existsById(id)){
             throw new HeroNotFoundException("nie znaleziono postaci o id=" + id);
         }
-        return mapHeroToDTO(hero.get());
+        return mapHeroToDTO(heroRepository.findById(id).get());
     }
 
+    //TODO zmienic sprawdzenie bohaterów z find na existBy!!
     @Override
     public HeroDTO getHeroByFirstName(String firstName) {
-        Optional<Hero> hero = heroRepository.findByFirstName(firstName);
-        if (hero.isEmpty()){
+        if (heroRepository.existsByFirstName(firstName)){
             throw new HeroNotFoundException("nie znaleziono postaci o first name=" + firstName);
         }
-        return mapHeroToDTO(hero.get());
+        return mapHeroToDTO(heroRepository.findByFirstName(firstName).get());
     }
 
     //SPRAWDZIC optymlizacje

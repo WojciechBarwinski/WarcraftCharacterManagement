@@ -2,6 +2,7 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Controllers;
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTOToPreview;
+import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.RelationDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Services.HeroService;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Services.RelationService;
 import io.swagger.annotations.ApiOperation;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController()
 @RequestMapping("/heroes")
@@ -53,7 +55,6 @@ public class HeroController {
         return heroService.getHeroByFirstName(name);
     }
 
-
     @ApiOperation(value = "Update a hero, need only new information", notes = "Returns url and json with to updated hero")
     @PutMapping("/{id}")
     public ResponseEntity<HeroDTO> updateHero(@PathVariable Long id ,@RequestBody HeroDTO heroDTO){
@@ -65,20 +66,6 @@ public class HeroController {
     @DeleteMapping("/{id}")
     public void deleteHero(@PathVariable Long id){
         heroService.deleteHero(id);
-    }
-
-    @ApiOperation(value = "Create a new relations to hero", notes = "Need id other hero and description")
-    @PostMapping(value = "/{id}/relations/")
-    public ResponseEntity<Map<String, String>> createNewRelation(@PathVariable Long id, Map<String, String> newRelation){
-
-        return null;
-    }
-
-
-    @GetMapping(value = "/{id}/relations/")
-    public Map<String, String> readRelationOfHero(@PathVariable Long id){
-        Map<String, String> relation = relationService.allRelationByHero(id);
-        return relation;
     }
 
     private ResponseEntity<HeroDTO> getCorrectURILocation(HeroDTO heroDTO){
