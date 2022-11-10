@@ -4,8 +4,8 @@ import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.RelationDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Hero;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Relation;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.RelationKey;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ExceptionChecker;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.HeroNotFoundException;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ResourceNotFoundException;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.HeroRepository;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.RelationRepository;
@@ -18,12 +18,14 @@ public class RelationServiceImpl implements RelationService {
 
     HeroRepository heroRepository;
     RelationRepository relationRepository;
-    private RelationDTO newRelation;
+    ExceptionChecker exceptCheck;
 
     public RelationServiceImpl(RelationRepository relationRepository,
-                               HeroRepository heroRepository) {
+                               HeroRepository heroRepository,
+                               ExceptionChecker exceptCheck) {
         this.relationRepository = relationRepository;
         this.heroRepository = heroRepository;
+        this.exceptCheck = exceptCheck;
     }
 
 
@@ -33,41 +35,42 @@ public class RelationServiceImpl implements RelationService {
     }
 
     @Override
-    public Set<RelationDTO> addNewRelation(Long id, RelationDTO newRelation) {
-        checkIfHeroDoesntExistAndThrowExcep(id);
+    public Set<RelationDTO> addNewRelation(Long ownerId, RelationDTO relation) {
+        Long heroId = relation.getHeroId();
+        String heroName = relation.getHeroFirstName();
 
-        if (newRelation.getHeroFirstName() == null && newRelation.getHeroId() == null){
-            throw new ResourceNotFoundException("Koniecznie należy podać imię lub id bohatera");
-        }
+        exceptCheck.ifHeroDoesNotExist(ownerId);
+        exceptCheck.ifIdAndNameAreNull(heroId, heroName);
 
-        if (newRelation.getHeroId() != null){
-            checkIfHeroDoesntExistAndThrowExcep(id);
-            RelationKey byId = new RelationKey(heroRepository.findById(id).get(), heroRepository.findById(newRelation.getHeroId()).get());
-            relationRepository.save(new Relation(byId, newRelation.getDescription()));
+        if (heroId!= null){
+            relationRepository.save(createRelationById(ownerId, heroId, relation.getDescription()));
         } else {
-            if (!heroRepository.existsByFirstName(newRelation.getHeroFirstName())){
-                throw new HeroNotFoundException("nie znaleziono postaci o first name=" + newRelation.getHeroFirstName());
-            } else {
-                RelationKey byName = new RelationKey(heroRepository.findById(id).get(),heroRepository.findByFirstName(newRelation.getHeroFirstName()).get());
-                relationRepository.save(new Relation(byName, newRelation.getDescription()));
-            }
+            relationRepository.save(createRelationByName(ownerId, heroName, relation.getDescription()));
         }
-
-
-
-        return null;
+        return HeroMapper.mapRelations(relationRepository.findByKey_OwnerId(ownerId));
     }
 
     @Override
     public Set<RelationDTO> allRelationByHero(Long id) {
-        checkIfHeroDoesntExistAndThrowExcep(id);
+        exceptCheck.ifHeroDoesNotExist(id);
         Set<Relation> all = relationRepository.findByKey_OwnerId(id);
         return HeroMapper.mapRelations(all);
     }
 
-    private void checkIfHeroDoesntExistAndThrowExcep(Long id){
-        if (!heroRepository.existsById(id)){
-            throw new HeroNotFoundException("wybrana postać o id=" + id + " nie istnieje. Proszę wybrać istniejącą postać");
-        }
+    private Relation createRelationById(Long ownerId, Long heroId, String description){
+        exceptCheck.ifOwnerIdAndHeroIdAreTheSame(ownerId, heroId);
+        exceptCheck.ifHeroDoesNotExist(heroId);
+        RelationKey keyById = new RelationKey(heroRepository.findById(ownerId).orElseThrow(),
+                heroRepository.findById(heroId).orElseThrow());
+        return new Relation(keyById, description);
+    }
+
+    private Relation createRelationByName(Long ownerId, String heroName, String description){
+        Hero hero = heroRepository.findByFirstName(heroName)
+                .orElseThrow(() -> new HeroNotFoundException(heroName));
+        exceptCheck.ifOwnerIdAndHeroIdAreTheSame(ownerId, hero.getId());
+        RelationKey keyByName = new RelationKey(heroRepository.findById(ownerId).orElseThrow(),
+                hero);
+        return new Relation(keyByName, description);
     }
 }

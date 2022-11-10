@@ -53,22 +53,17 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public HeroDTO getHeroById(Long id) {
-        if (!heroRepository.existsById(id)){
-            throw new HeroNotFoundException("nie znaleziono postaci o id=" + id);
-        }
-        return mapHeroToDTO(heroRepository.findById(id).get());
+        return mapHeroToDTO(heroRepository.findById(id)
+                .orElseThrow(()-> new HeroNotFoundException(id.toString())));
     }
 
-    //TODO zmienic sprawdzenie bohaterów z find na existBy!!
     @Override
     public HeroDTO getHeroByFirstName(String firstName) {
-        if (heroRepository.existsByFirstName(firstName)){
-            throw new HeroNotFoundException("nie znaleziono postaci o first name=" + firstName);
-        }
-        return mapHeroToDTO(heroRepository.findByFirstName(firstName).get());
+        return mapHeroToDTO(heroRepository.findByFirstName(firstName)
+                .orElseThrow(()->new HeroNotFoundException(firstName)));
     }
 
-    //SPRAWDZIC optymlizacje
+    //TODO SPRAWDZIC optymlizacje
     @Transactional
     @Override
     public HeroDTO createNewHero(HeroDTO heroDTO) {
@@ -90,12 +85,8 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public void deleteHero(Long id) {
-        Optional<Hero> hero = heroRepository.findById(id);
-
-        if (hero.isEmpty()){
-            throw new HeroNotFoundException("nie znaleziono postaci o id=" + id);
-        }
-
+        Hero hero = heroRepository.findById(id)
+                .orElseThrow(() -> new HeroNotFoundException(id.toString()));
         heroRepository.deleteById(id);
     }
 
@@ -103,7 +94,7 @@ public class HeroServiceImpl implements HeroService {
     private Hero jeszczeNieWiem(HeroDTO dto, Long id){
         Hero heroToUpdate = new Hero();
         Hero heroFromDB = heroRepository.findById(id)
-                .orElseThrow(() ->new HeroNotFoundException("There is no hero with id=" + id));
+                .orElseThrow(() ->new HeroNotFoundException(id.toString()));
 
         heroToUpdate.setId(id);
 
