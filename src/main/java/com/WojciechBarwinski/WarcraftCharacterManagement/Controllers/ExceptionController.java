@@ -1,6 +1,7 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Controllers;
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.HeroNotFoundException;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.IncorrectDateException;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ResourceNotFoundException;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.UpdateConflictException;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,12 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(UpdateConflictException.class)
     public String updateConflict(Exception e){
+        return e.getMessage();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IncorrectDateException.class)
+    public String incorrectDate(Exception e){
         return e.getMessage();
     }
 }

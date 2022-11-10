@@ -39,7 +39,7 @@ public class RelationServiceImpl implements RelationService {
     public Set<RelationDTO> addNewRelation(Long ownerId, RelationDTO relation) {
         Long heroId = relation.getHeroId();
         String heroName = relation.getHeroFirstName();
-
+        exceptCheck.ifDescriptionDoesNotExist(relation.getDescription());
         exceptCheck.ifHeroDoesNotExist(ownerId);
         exceptCheck.ifIdAndNameAreNull(heroId, heroName);
 
@@ -58,6 +58,20 @@ public class RelationServiceImpl implements RelationService {
         return HeroMapper.mapRelations(all);
     }
 
+    @Override
+    public Set<RelationDTO> updateRelation(Long ownerId, RelationDTO updateRelation) {
+        Long heroId = updateRelation.getHeroId();
+        exceptCheck.ifDescriptionDoesNotExist(updateRelation.getDescription());
+
+        if (!relationRepository.existsByKey_OwnerIdAndKey_OtherId(ownerId, heroId)){
+            return addNewRelation(ownerId, updateRelation);
+        }
+        Relation relation = relationRepository.findByKey_OwnerIdAndKey_OtherId(ownerId, heroId);
+        relation.setDescription(updateRelation.getDescription());
+        relationRepository.save(relation);
+        return HeroMapper.mapRelations(relationRepository.findByKey_OwnerId(ownerId));
+    }
+
     @Transactional
     @Override
     public void deleteOneSideOfRelation(Long ownerId, Long heroId) {
@@ -65,12 +79,14 @@ public class RelationServiceImpl implements RelationService {
         relationRepository.deleteByKey_OwnerIdAndKey_OtherId(ownerId, heroId);
     }
 
+    @Transactional
     @Override
-    public void deleteTwoSideOfRelation(Long ownerId, Long heroId) {
+    public void deleteTwoSidesOfRelation(Long ownerId, Long heroId) {
         exceptCheck.ifOwnerIdAndHeroIdAreTheSame(ownerId, heroId);
         relationRepository.deleteByKey_OwnerIdAndKey_OtherId(ownerId, heroId);
         relationRepository.deleteByKey_OwnerIdAndKey_OtherId(heroId, ownerId);
     }
+
 
     private Relation createRelationById(Long ownerId, Long heroId, String description){
         exceptCheck.ifOwnerIdAndHeroIdAreTheSame(ownerId, heroId);

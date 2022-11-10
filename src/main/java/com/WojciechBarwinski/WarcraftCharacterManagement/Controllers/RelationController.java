@@ -32,6 +32,11 @@ public class RelationController {
         return relationService.allRelationByHero(ownerId);
     }
 
+    @PutMapping
+    public Set<RelationDTO> updateRelation(@PathVariable Long ownerId, @RequestBody RelationDTO updateRelation){
+        return relationService.updateRelation(ownerId, updateRelation);
+    }
+
     @ApiOperation(value = "Delete relation but only by side of owner", notes = "return all remain relations")
     @DeleteMapping()
     public Set<RelationDTO> deleteOneSideOfRelation(@PathVariable Long ownerId, @RequestParam(value="heroId") Long heroId){
@@ -41,8 +46,8 @@ public class RelationController {
 
     @ApiOperation(value = "Delete relation by both side", notes = "return all remain relations")
     @DeleteMapping("/{heroId}")
-    public Set<RelationDTO> deleteTwoSideOfRelation(@PathVariable Long ownerId, Long heroId){
-        relationService.deleteTwoSideOfRelation(ownerId, heroId);
+    public Set<RelationDTO> deleteTwoSidesOfRelation(@PathVariable Long ownerId, Long heroId){
+        relationService.deleteTwoSidesOfRelation(ownerId, heroId);
         return relationService.allRelationByHero(ownerId);
     }
 }

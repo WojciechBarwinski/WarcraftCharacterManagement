@@ -2,7 +2,6 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Controllers;
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTOToPreview;
-import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.RelationDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Services.HeroService;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Services.RelationService;
 import io.swagger.annotations.ApiOperation;
@@ -13,8 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
 
 @RestController()
 @RequestMapping("/heroes")

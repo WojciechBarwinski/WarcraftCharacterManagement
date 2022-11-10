@@ -19,9 +19,9 @@ public class ExceptionChecker {
         }
     }
 
-    public void ifHeroByNameDoesNotExist(String name){
-        if (!heroRepository.existsByFirstName(name)){
-            throw new HeroNotFoundException(name);
+    public void ifDescriptionDoesNotExist(String description){
+        if (description == null || description.isEmpty()){
+            throw new IncorrectDateException("Musisz podać opis");
         }
     }
 
