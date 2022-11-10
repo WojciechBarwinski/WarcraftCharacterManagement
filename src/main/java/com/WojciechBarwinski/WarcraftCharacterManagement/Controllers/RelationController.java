@@ -5,14 +5,12 @@ import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.RelationDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Services.RelationService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.Set;
 
 @RestController()
-@RequestMapping("/heroes/{heroId}/relations")
+@RequestMapping("/heroes/{ownerId}/relations")
 public class RelationController {
 
     private final RelationService relationService;
@@ -24,14 +22,27 @@ public class RelationController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create a new relations to hero", notes = "Need id other hero and description. Return all hero's relations")
     @PostMapping()
-    public Set<RelationDTO> createNewRelation(@PathVariable Long heroId, @RequestBody RelationDTO newRelation){
-        return relationService.addNewRelation(heroId, newRelation);
+    public Set<RelationDTO> createNewRelation(@PathVariable Long ownerId, @RequestBody RelationDTO newRelation){
+        return relationService.addNewRelation(ownerId, newRelation);
     }
 
     @ApiOperation(value = "Read all relations of current hero", notes = "show all relations")
     @GetMapping()
-    public Set<RelationDTO> readRelationOfHero(@PathVariable Long heroId){
-        return relationService.allRelationByHero(heroId);
+    public Set<RelationDTO> readRelationsOfHero(@PathVariable Long ownerId){
+        return relationService.allRelationByHero(ownerId);
     }
 
+    @ApiOperation(value = "Delete relation but only by side of owner", notes = "return all remain relations")
+    @DeleteMapping()
+    public Set<RelationDTO> deleteOneSideOfRelation(@PathVariable Long ownerId, @RequestParam(value="heroId") Long heroId){
+        relationService.deleteOneSideOfRelation(ownerId, heroId);
+        return relationService.allRelationByHero(ownerId);
+    }
+
+    @ApiOperation(value = "Delete relation by both side", notes = "return all remain relations")
+    @DeleteMapping("/{heroId}")
+    public Set<RelationDTO> deleteTwoSideOfRelation(@PathVariable Long ownerId, Long heroId){
+        relationService.deleteTwoSideOfRelation(ownerId, heroId);
+        return relationService.allRelationByHero(ownerId);
+    }
 }

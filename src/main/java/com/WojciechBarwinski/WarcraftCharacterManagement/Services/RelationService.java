@@ -3,8 +3,6 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Services;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.RelationDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Hero;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public interface RelationService {
@@ -14,4 +12,7 @@ public interface RelationService {
     Set<RelationDTO> addNewRelation(Long heroId, RelationDTO newRelation);
 
     Set<RelationDTO> allRelationByHero(Long id);
+
+    void deleteOneSideOfRelation(Long ownerId, Long heroId);
+    void deleteTwoSideOfRelation(Long ownerId, Long heroId);
 }

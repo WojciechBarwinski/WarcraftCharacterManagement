@@ -11,6 +11,7 @@ import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.HeroReposi
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.RelationRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Set;
 
 @Service
@@ -55,6 +56,20 @@ public class RelationServiceImpl implements RelationService {
         exceptCheck.ifHeroDoesNotExist(id);
         Set<Relation> all = relationRepository.findByKey_OwnerId(id);
         return HeroMapper.mapRelations(all);
+    }
+
+    @Transactional
+    @Override
+    public void deleteOneSideOfRelation(Long ownerId, Long heroId) {
+        exceptCheck.ifOwnerIdAndHeroIdAreTheSame(ownerId, heroId);
+        relationRepository.deleteByKey_OwnerIdAndKey_OtherId(ownerId, heroId);
+    }
+
+    @Override
+    public void deleteTwoSideOfRelation(Long ownerId, Long heroId) {
+        exceptCheck.ifOwnerIdAndHeroIdAreTheSame(ownerId, heroId);
+        relationRepository.deleteByKey_OwnerIdAndKey_OtherId(ownerId, heroId);
+        relationRepository.deleteByKey_OwnerIdAndKey_OtherId(heroId, ownerId);
     }
 
     private Relation createRelationById(Long ownerId, Long heroId, String description){

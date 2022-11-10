@@ -9,4 +9,5 @@ import java.util.Set;
 public interface RelationRepository extends JpaRepository<Relation, RelationKey> {
 
     Set<Relation> findByKey_OwnerId(Long id);
+    void deleteByKey_OwnerIdAndKey_OtherId(Long ownerId, Long otherId);
 }

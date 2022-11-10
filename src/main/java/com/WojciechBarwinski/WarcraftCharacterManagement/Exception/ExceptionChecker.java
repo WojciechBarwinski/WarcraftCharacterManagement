@@ -33,7 +33,7 @@ public class ExceptionChecker {
 
     public void ifOwnerIdAndHeroIdAreTheSame(Long ownerId, Long heroId){
         if (ownerId.equals(heroId)){
-            throw new UpdateConflictException("Id/imię bohatera w nowej relacji jest identyczne jak obecnego bohatera");
+            throw new UpdateConflictException("Id bohatera w relacji jest identyczne jak obecnego bohatera");
         }
     }
 }
