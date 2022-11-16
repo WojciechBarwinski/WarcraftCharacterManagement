@@ -16,4 +16,11 @@ public class ItemMapper {
                 .ownerId(item.getOwner().getId())
                 .build();
     }
+
+    public static Item mapDTOToItem(ItemDTO itemDTO){
+        return Item.builder()
+                .name(itemDTO.getName())
+                .description(itemDTO.getDescription())
+                .build();
+    }
 }

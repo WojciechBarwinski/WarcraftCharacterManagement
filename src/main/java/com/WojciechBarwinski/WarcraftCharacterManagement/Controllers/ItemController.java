@@ -2,8 +2,10 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Controllers;
 
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.ItemDTO;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Item;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Services.ItemService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -16,6 +18,13 @@ public class ItemController {
 
     public ItemController(ItemService itemService) {
         this.itemService = itemService;
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create a new item", notes = "Return new item. This method require Hero")
+    @PostMapping()
+    public ItemDTO createItem(@RequestBody ItemDTO itemDTO){
+        return itemService.createItem(itemDTO);
     }
 
     @ApiOperation(value = "Read a item by id", notes = "Returns item as per id")
@@ -36,5 +45,22 @@ public class ItemController {
         return itemService.getAllItemsByHero(heroId);
     }
 
+    @ApiOperation(value = "Update a item, need only new information", notes = "Returns url and json with to updated item")
+    @PutMapping(value = "/id")
+    public ItemDTO updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO){
+        return itemService.updateItem(id, itemDTO);
+    }
+
+    @ApiOperation(value = "Delete item by item id", notes = "Return nothing")
+    @DeleteMapping(value = "/{id}")
+    public void deleteItemById(@PathVariable Long id){
+        itemService.deleteItemById(id);
+    }
+
+    @ApiOperation(value = "Delete item by item name", notes = "Return nothing")
+    @DeleteMapping(value = "/")
+    public void deleteItemByName(@RequestParam(value = "itemName") String itemName){
+        itemService.deleteItemByName(itemName);
+    }
 
 }

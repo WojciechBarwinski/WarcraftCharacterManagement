@@ -36,5 +36,17 @@ public class ExceptionChecker {
             throw new UpdateConflictException("Id bohatera w relacji jest identyczne jak obecnego bohatera");
         }
     }
+
+    public void ifHeroIdIsNull(Long id){
+        if (id == null){
+            throw new HeroNotFoundException();
+        }
+    }
+
+    public void ifItemNameIsNull(String itemName){
+        if (itemName == null){
+            throw new ItemNotFoundException();
+        }
+    }
 }
 

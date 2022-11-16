@@ -10,4 +10,12 @@ public interface ItemService {
     Set<ItemDTO> getAllItems();
 
     Set<ItemDTO> getAllItemsByHero(Long heroId);
+
+    ItemDTO createItem(ItemDTO itemDTO);
+
+    void deleteItemById(Long id);
+
+    void deleteItemByName(String name);
+
+    ItemDTO updateItem(Long id, ItemDTO itemDTO);
 }
