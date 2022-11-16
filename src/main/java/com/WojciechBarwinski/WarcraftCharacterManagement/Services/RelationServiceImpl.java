@@ -87,7 +87,6 @@ public class RelationServiceImpl implements RelationService {
         relationRepository.deleteByKey_OwnerIdAndKey_OtherId(heroId, ownerId);
     }
 
-
     private Relation createRelationById(Long ownerId, Long heroId, String description){
         exceptCheck.ifOwnerIdAndHeroIdAreTheSame(ownerId, heroId);
         exceptCheck.ifHeroDoesNotExist(heroId);

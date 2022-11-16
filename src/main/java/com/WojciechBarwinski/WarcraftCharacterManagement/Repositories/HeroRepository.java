@@ -35,8 +35,5 @@ public interface HeroRepository extends JpaRepository<Hero, Long> {
             "LEFT JOIN FETCH h.titles " +
             "WHERE h.firstName = ?1")
     Optional<Hero> findByFirstName(String firstName);
-
-
-    boolean existsByFirstName(String firstName);
 }
 

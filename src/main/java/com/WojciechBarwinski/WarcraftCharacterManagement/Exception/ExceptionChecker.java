@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExceptionChecker {
 
-    private HeroRepository heroRepository;
+    private final HeroRepository heroRepository;
 
 
     ExceptionChecker(HeroRepository heroRepository) {

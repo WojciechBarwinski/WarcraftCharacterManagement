@@ -5,9 +5,7 @@ import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTOToPreview;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.RelationDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.*;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 

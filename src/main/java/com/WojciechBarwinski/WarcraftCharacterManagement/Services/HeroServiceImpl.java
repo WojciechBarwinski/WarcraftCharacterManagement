@@ -63,35 +63,29 @@ public class HeroServiceImpl implements HeroService {
                 .orElseThrow(()->new HeroNotFoundException(firstName)));
     }
 
-    //TODO SPRAWDZIC optymlizacje
     @Transactional
     @Override
     public HeroDTO createNewHero(HeroDTO heroDTO) {
-        Hero hero = mapDTOToNewHero(heroDTO);
-        hero.setRace(checkRace(heroDTO.getRace()));
-        hero.setFractions(checkFraction(heroDTO.getFractions()));
-        hero.setBooks(checkBook(heroDTO.getBooks()));
-        Hero save = heroRepository.saveAndFlush(hero);
-
+        Hero save = heroRepository.saveAndFlush(buildNewHero(heroDTO));
         return mapHeroToDTO(save);
     }
 
     @Transactional
     @Override
     public HeroDTO updateHero(HeroDTO heroDTO, Long id) {
-        Hero hero = jeszczeNieWiem(heroDTO, id);
+        Hero hero = buildUpdateHero(heroDTO, id);
         return mapHeroToDTO(heroRepository.save(hero));
     }
 
     @Override
     public void deleteHero(Long id) {
-        Hero hero = heroRepository.findById(id)
-                .orElseThrow(() -> new HeroNotFoundException(id.toString()));
+        if(!heroRepository.existsById(id)){
+            throw new HeroNotFoundException(id.toString());
+        }
         heroRepository.deleteById(id);
     }
 
-    //TODO NAZWA!!
-    private Hero jeszczeNieWiem(HeroDTO dto, Long id){
+    private Hero buildUpdateHero(HeroDTO dto, Long id){
         Hero heroToUpdate = new Hero();
         Hero heroFromDB = heroRepository.findById(id)
                 .orElseThrow(() ->new HeroNotFoundException(id.toString()));
@@ -135,6 +129,14 @@ public class HeroServiceImpl implements HeroService {
         }
 
         return heroToUpdate;
+    }
+
+    private Hero buildNewHero(HeroDTO heroDTO){
+        Hero hero = mapDTOToNewHero(heroDTO);
+        hero.setRace(checkRace(heroDTO.getRace()));
+        hero.setFractions(checkFraction(heroDTO.getFractions()));
+        hero.setBooks(checkBook(heroDTO.getBooks()));
+        return hero;
     }
 
     private Race checkRace(String raceName){
