@@ -14,7 +14,6 @@ import javax.persistence.*;
 public class Item {
 
     @Id
-    @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

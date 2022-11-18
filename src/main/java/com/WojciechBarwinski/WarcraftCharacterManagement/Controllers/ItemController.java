@@ -46,7 +46,7 @@ public class ItemController {
     }
 
     @ApiOperation(value = "Update a item, need only new information", notes = "Returns url and json with to updated item")
-    @PutMapping(value = "/id")
+    @PutMapping("/{id}")
     public ItemDTO updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO){
         return itemService.updateItem(id, itemDTO);
     }

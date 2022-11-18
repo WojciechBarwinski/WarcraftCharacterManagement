@@ -128,6 +128,8 @@ public class HeroServiceImpl implements HeroService {
             heroToUpdate.setBooks(checkBook(dto.getBooks()));
         }
 
+        //TODO Reloation build!!
+
         return heroToUpdate;
     }
 
