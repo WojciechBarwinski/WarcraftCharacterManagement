@@ -4,9 +4,11 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Controllers;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.ItemDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Services.ItemService;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Set;
 
 @RestController()
@@ -19,11 +21,11 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create a new item", notes = "Return new item. This method require Hero")
     @PostMapping()
-    public ItemDTO createItem(@RequestBody ItemDTO itemDTO){
-        return itemService.createItem(itemDTO);
+    public ResponseEntity<ItemDTO> createItem(@RequestBody ItemDTO itemDTO){
+        ItemDTO item = itemService.createItem(itemDTO);
+        return getCorrectURILocation(item);
     }
 
     @ApiOperation(value = "Read a item by id", notes = "Returns item as per id")
@@ -46,8 +48,9 @@ public class ItemController {
 
     @ApiOperation(value = "Update a item, need only new information", notes = "Returns url and json with to updated item")
     @PutMapping("/{id}")
-    public ItemDTO updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO){
-        return itemService.updateItem(id, itemDTO);
+    public ResponseEntity<ItemDTO> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO){
+        ItemDTO item = itemService.updateItem(id, itemDTO);
+        return getCorrectURILocation(item);
     }
 
     @ApiOperation(value = "Delete item by item id", notes = "Return nothing")
@@ -62,4 +65,11 @@ public class ItemController {
         itemService.deleteItemByName(itemName);
     }
 
+    private ResponseEntity<ItemDTO> getCorrectURILocation(ItemDTO itemDTO){
+        URI location = ServletUriComponentsBuilder.fromCurrentServletMapping()
+                .path("/items/{id}")
+                .buildAndExpand(itemDTO.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(itemDTO);
+    }
 }

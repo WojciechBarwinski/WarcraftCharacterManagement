@@ -1,6 +1,6 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Exception;
 
-public class ItemNotFoundException extends RuntimeException{
+public class ItemNotFoundException extends RuntimeException {
 
     public ItemNotFoundException() {
         super("Musisz podac nazwe itemu");

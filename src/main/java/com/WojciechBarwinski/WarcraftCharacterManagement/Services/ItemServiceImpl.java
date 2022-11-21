@@ -1,6 +1,5 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Services;
 
-import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.ItemDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Hero;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Item;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -76,13 +74,13 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     @Override
-    public void deleteItemById(Long id){
+    public void deleteItemById(Long id) {
         itemRepository.deleteById(id);
     }
 
     @Transactional
     @Override
-    public void deleteItemByName(String name){
+    public void deleteItemByName(String name) {
         itemRepository.deleteByName(name);
     }
 
@@ -93,36 +91,36 @@ public class ItemServiceImpl implements ItemService {
         return mapItemToDTO(itemRepository.save(itemToUpdate));
     }
 
-    private void checkItemNameExists(String itemName){
-        if (itemRepository.existsByName(itemName)){
+    private void checkItemNameExists(String itemName) {
+        if (itemRepository.existsByName(itemName)) {
             throw new ResourceNotFoundException("Item o nazwie " + itemName + " juz istnieje");
         }
     }
 
-    private Item buildUpdateItem(Long id, ItemDTO dto){
+    private Item buildUpdateItem(Long id, ItemDTO dto) {
         Item itemToUpdate = new Item();
         Item itemFromDB = itemRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException(id.toString()));
 
         itemToUpdate.setId(id);
 
-        if(dto.getName()== null){
+        if (dto.getName() == null) {
             itemToUpdate.setName(itemFromDB.getName());
         } else {
             itemToUpdate.setName(dto.getName());
         }
 
-        if (dto.getDescription() == null){
+        if (dto.getDescription() == null) {
             itemToUpdate.setDescription(itemFromDB.getDescription());
         } else {
             itemToUpdate.setDescription(dto.getDescription());
         }
 
-        if (dto.getOwnerId() == null){
+        if (dto.getOwnerId() == null) {
             itemToUpdate.setOwner(itemFromDB.getOwner());
         } else {
             itemToUpdate.setOwner(heroRepository.findById(dto.getOwnerId())
-                    .orElseThrow(()->new HeroNotFoundException(dto.getOwnerId().toString())));
+                    .orElseThrow(() -> new HeroNotFoundException(dto.getOwnerId().toString())));
         }
 
         return itemToUpdate;

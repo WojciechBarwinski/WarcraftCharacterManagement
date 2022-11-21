@@ -18,7 +18,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper.*;
@@ -43,7 +45,7 @@ public class HeroServiceImpl implements HeroService {
         this.bookRepository = bookRepository;
     }
 
-    public List<HeroDTOToPreview> getAllHeroes(int page, Sort.Direction direction){
+    public List<HeroDTOToPreview> getAllHeroes(int page, Sort.Direction direction) {
         List<HeroDTOToPreview> heroesDTO = new ArrayList<>();
         for (Hero hero : heroRepository.findAllHeroes(PageRequest.of(page, PAGE_SIZE, Sort.by(direction, "firstName")))) {
             heroesDTO.add(mapHeroToPreview(hero));
@@ -54,13 +56,13 @@ public class HeroServiceImpl implements HeroService {
     @Override
     public HeroDTO getHeroById(Long id) {
         return mapHeroToDTO(heroRepository.findById(id)
-                .orElseThrow(()-> new HeroNotFoundException(id.toString())));
+                .orElseThrow(() -> new HeroNotFoundException(id.toString())));
     }
 
     @Override
     public HeroDTO getHeroByFirstName(String firstName) {
         return mapHeroToDTO(heroRepository.findByFirstName(firstName)
-                .orElseThrow(()->new HeroNotFoundException(firstName)));
+                .orElseThrow(() -> new HeroNotFoundException(firstName)));
     }
 
     @Transactional
@@ -79,50 +81,50 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public void deleteHero(Long id) {
-        if(!heroRepository.existsById(id)){
+        if (!heroRepository.existsById(id)) {
             throw new HeroNotFoundException(id.toString());
         }
         heroRepository.deleteById(id);
     }
 
-    private Hero buildUpdateHero(HeroDTO dto, Long id){
+    private Hero buildUpdateHero(HeroDTO dto, Long id) {
         Hero heroToUpdate = new Hero();
         Hero heroFromDB = heroRepository.findById(id)
-                .orElseThrow(() ->new HeroNotFoundException(id.toString()));
+                .orElseThrow(() -> new HeroNotFoundException(id.toString()));
 
         heroToUpdate.setId(id);
 
-        if (dto.getFirstName() == null){
+        if (dto.getFirstName() == null) {
             heroToUpdate.setFirstName(heroFromDB.getFirstName());
         } else {
             heroToUpdate.setFirstName(dto.getFirstName());
         }
 
-        if (dto.getLastName() == null){
+        if (dto.getLastName() == null) {
             heroToUpdate.setLastName(heroFromDB.getLastName());
         } else {
             heroToUpdate.setLastName(dto.getLastName());
         }
 
-        if (dto.getTitles().isEmpty()){
+        if (dto.getTitles().isEmpty()) {
             heroToUpdate.setTitles(heroFromDB.getTitles());
         } else {
             heroToUpdate.setTitles(dto.getTitles());
         }
 
-        if (dto.getRace() == null){
+        if (dto.getRace() == null) {
             heroToUpdate.setRace(heroFromDB.getRace());
         } else {
             heroToUpdate.setRace(checkRace(dto.getRace()));
         }
 
-        if (dto.getFractions().isEmpty()){
+        if (dto.getFractions().isEmpty()) {
             heroToUpdate.setFractions(heroFromDB.getFractions());
         } else {
             heroToUpdate.setFractions(checkFraction(dto.getFractions()));
         }
 
-        if (dto.getBooks().isEmpty()){
+        if (dto.getBooks().isEmpty()) {
             heroToUpdate.setBooks(heroFromDB.getBooks());
         } else {
             heroToUpdate.setBooks(checkBook(dto.getBooks()));
@@ -135,7 +137,7 @@ public class HeroServiceImpl implements HeroService {
         return heroToUpdate;
     }
 
-    private Hero buildNewHero(HeroDTO heroDTO){
+    private Hero buildNewHero(HeroDTO heroDTO) {
         Hero hero = mapDTOToNewHero(heroDTO);
         hero.setRace(checkRace(heroDTO.getRace()));
         hero.setFractions(checkFraction(heroDTO.getFractions()));
@@ -143,30 +145,30 @@ public class HeroServiceImpl implements HeroService {
         return hero;
     }
 
-    private Race checkRace(String raceName){
+    private Race checkRace(String raceName) {
         return raceRepository.findByName(raceName)
                 .orElseThrow(() -> new ResourceNotFoundException(raceName + " -> this race doesn't exist"));
     }
 
-    private Set<Fraction> checkFraction(Set<String> fractionsName){
+    private Set<Fraction> checkFraction(Set<String> fractionsName) {
         Set<Fraction> fractions = fractionRepository.findByNames(fractionsName);
 
-        if (fractionsName.size()!=fractions.size()){
+        if (fractionsName.size() != fractions.size()) {
             throwExceptionWithIncorrectFractionsName(fractionsName, fractions);
         }
         return fractions;
     }
 
-    private Set<Book> checkBook(Set<String> booksTitles){
+    private Set<Book> checkBook(Set<String> booksTitles) {
         Set<Book> books = bookRepository.findByTitles(booksTitles);
 
-        if (booksTitles.size()!=books.size()){
+        if (booksTitles.size() != books.size()) {
             throwExceptionWithIncorrectBooksTitles(booksTitles, books);
         }
         return books;
     }
 
-    private void throwExceptionWithIncorrectFractionsName(Set<String> names, Set<Fraction> fractions){
+    private void throwExceptionWithIncorrectFractionsName(Set<String> names, Set<Fraction> fractions) {
         Set<String> collect = fractions.stream()
                 .map(Fraction::getName).collect(Collectors.toSet());
         names.removeAll(collect);
@@ -174,7 +176,7 @@ public class HeroServiceImpl implements HeroService {
         throw new ResourceNotFoundException(stringWithIncorrectNames(names) + " -> this fraction/s doesn't exist");
     }
 
-    private void throwExceptionWithIncorrectBooksTitles(Set<String> names, Set<Book> fractions){
+    private void throwExceptionWithIncorrectBooksTitles(Set<String> names, Set<Book> fractions) {
         Set<String> collect = fractions.stream()
                 .map(Book::getTitle).collect(Collectors.toSet());
         names.removeAll(collect);
@@ -182,7 +184,7 @@ public class HeroServiceImpl implements HeroService {
         throw new ResourceNotFoundException(stringWithIncorrectNames(names) + " -> this fraction/s doesn't exist");
     }
 
-    private String stringWithIncorrectNames(Set<String> names){
+    private String stringWithIncorrectNames(Set<String> names) {
         StringBuilder message = new StringBuilder();
         for (String s : names) {
             message.append(s).append(" ");

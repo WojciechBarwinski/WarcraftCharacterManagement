@@ -67,7 +67,7 @@ public class RaceServiceImpl implements RaceService {
     @Transactional
     @Override
     public void deleteRace(String raceName) {
-        if (heroRepository.existsByRace_Name(raceName)){
+        if (heroRepository.existsByRace_Name(raceName)) {
             throw new IncorrectDateException("Istnieja postacie bedące tej rasy");
         } else
             raceRepository.deleteByName(raceName);

@@ -8,12 +8,11 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class DataInitializer implements ApplicationListener<ContextRefreshedEvent>{
+public class DataInitializer implements ApplicationListener<ContextRefreshedEvent> {
 
     HeroRepository heroRepository;
     ItemRepository itemRepository;
@@ -112,12 +111,13 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         Item bow = new Item("bow", "jakiś tam opis luku");
         Item sword = new Item("sword", "jakis tam opis miecza");
         sylvanas.addItem(bow);
-        tyrande.addItem(sword);;
+        tyrande.addItem(sword);
+        ;
         itemRepository.save(bow);
         itemRepository.save(sword);
     }
 
-    private static List<Hero> createListOfHeroesToAdd(){
+    private static List<Hero> createListOfHeroesToAdd() {
         List<Hero> heroes = new ArrayList<>();
 
         heroes.add(new Hero("Sylvanas", "Windrunner"));
@@ -127,7 +127,8 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         heroes.add(new Hero("Shandris", "Feathermoon"));
         return heroes;
     }
-    private static List<Race> createListOfRacesToAdd(){
+
+    private static List<Race> createListOfRacesToAdd() {
         List<Race> races = new ArrayList<>();
 
         races.add(new Race("Night Elf", "Jakis tam opis elfow"));
@@ -137,7 +138,8 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         races.add(new Race("Orc", "Jakis tam opis orka"));
         return races;
     }
-    private static List<Fraction> createListOfFractionsToAdd(){
+
+    private static List<Fraction> createListOfFractionsToAdd() {
         List<Fraction> fractions = new ArrayList<>();
 
         fractions.add(new Fraction("Sisterhood of Elune", "opis frakcji"));
@@ -146,7 +148,8 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         fractions.add(new Fraction("Horde", "opis frakcji"));
         return fractions;
     }
-    private static List<Place> createListOfPlacesToAdd(){
+
+    private static List<Place> createListOfPlacesToAdd() {
         List<Place> places = new ArrayList<>();
 
         places.add(new Place("Azeroth", "opis Azeroth"));
@@ -155,19 +158,21 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         places.add(new Place("Durotar", "opis Durotaru"));
         return places;
     }
-    private static List<Author> createListOfAuthorsToAdd(){
+
+    private static List<Author> createListOfAuthorsToAdd() {
         List<Author> authors = new ArrayList<>();
         authors.add(new Author("Richard A.", "Knaak", "USA"));
         authors.add(new Author("Christie", "Golden", "USA"));
         return authors;
     }
-    private static List<Book> createListOfBooksToAdd(){
+
+    private static List<Book> createListOfBooksToAdd() {
         List<Book> books = new ArrayList<>();
 
         books.add(new Book("The Well of Eternity", "jakis tam opis"));
-            books.get(0).setSeries("War of The Ancients");
+        books.get(0).setSeries("War of The Ancients");
         books.add(new Book("The Demon Soul", "jakis tam opis"));
-            books.get(1).setSeries("War of The Ancients");
+        books.get(1).setSeries("War of The Ancients");
         books.add(new Book("Sylvanas", "jakis tam opis"));
         return books;
     }

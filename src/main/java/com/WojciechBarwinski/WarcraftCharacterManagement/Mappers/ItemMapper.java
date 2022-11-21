@@ -8,7 +8,7 @@ public class ItemMapper {
     private ItemMapper() {
     }
 
-    public static ItemDTO mapItemToDTO(Item item){
+    public static ItemDTO mapItemToDTO(Item item) {
         return ItemDTO.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -17,7 +17,7 @@ public class ItemMapper {
                 .build();
     }
 
-    public static Item mapDTOToItem(ItemDTO itemDTO){
+    public static Item mapDTOToItem(ItemDTO itemDTO) {
         return Item.builder()
                 .name(itemDTO.getName())
                 .description(itemDTO.getDescription())

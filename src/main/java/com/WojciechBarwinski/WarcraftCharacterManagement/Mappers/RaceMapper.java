@@ -9,15 +9,14 @@ public class RaceMapper {
     }
 
 
-
-    public static RaceDTO mapRaceToDTO(Race race){
+    public static RaceDTO mapRaceToDTO(Race race) {
         return RaceDTO.builder()
                 .name(race.getName())
                 .description(race.getDescription())
                 .build();
     }
 
-    public static Race mapDTOToRace(RaceDTO raceDTO){
+    public static Race mapDTOToRace(RaceDTO raceDTO) {
         return new Race(raceDTO.getName(), raceDTO.getDescription());
     }
 }

@@ -14,7 +14,7 @@ public class HeroMapper {
     private HeroMapper() {
     }
 
-    public static HeroDTOToPreview mapHeroToPreview(Hero hero){
+    public static HeroDTOToPreview mapHeroToPreview(Hero hero) {
         return HeroDTOToPreview.builder()
                 .id(hero.getId())
                 .firstName(hero.getFirstName())
@@ -24,7 +24,7 @@ public class HeroMapper {
                 .build();
     }
 
-    public static HeroDTO mapHeroToDTO(Hero hero){
+    public static HeroDTO mapHeroToDTO(Hero hero) {
         return HeroDTO.builder()
                 .id(hero.getId())
                 .firstName(hero.getFirstName())
@@ -38,7 +38,7 @@ public class HeroMapper {
                 .build();
     }
 
-    public static Hero mapDTOToNewHero(HeroDTO DTO){
+    public static Hero mapDTOToNewHero(HeroDTO DTO) {
         return Hero.builder()
                 .firstName(DTO.getFirstName())
                 .lastName(DTO.getLastName())
@@ -48,20 +48,20 @@ public class HeroMapper {
 
     public static Set<RelationDTO> mapRelations(Set<Relation> ownRelations) {
         Set<RelationDTO> relations = new HashSet<>();
-        if (ownRelations != null){
+        if (ownRelations != null) {
             for (Relation relation : ownRelations) {
                 relations.add(RelationDTO.builder()
-                                .heroId(relation.getKey().getOther().getId())
-                            .heroFirstName(relation.getKey().getOther().getFirstName())
-                            .heroLastName(relation.getKey().getOther().getLastName())
-                            .description(relation.getDescription())
-                            .build());
+                        .heroId(relation.getKey().getOther().getId())
+                        .heroFirstName(relation.getKey().getOther().getFirstName())
+                        .heroLastName(relation.getKey().getOther().getLastName())
+                        .description(relation.getDescription())
+                        .build());
             }
         }
         return relations;
     }
 
-    private static Set<String> mapFactions(Set<Fraction> fractions){
+    private static Set<String> mapFactions(Set<Fraction> fractions) {
         Set<String> mappedFractions = new HashSet<>();
         for (Fraction fraction : fractions) {
             mappedFractions.add(fraction.getName());
@@ -69,7 +69,7 @@ public class HeroMapper {
         return mappedFractions;
     }
 
-    private static Set<String> mapBooks(Set<Book> books){
+    private static Set<String> mapBooks(Set<Book> books) {
         Set<String> mappedBooks = new HashSet<>();
         for (Book book : books) {
             mappedBooks.add(book.getTitle());
@@ -79,8 +79,8 @@ public class HeroMapper {
 
     private static Set<String> mapItems(Set<Item> items) {
         Set<String> mappedItems = new HashSet<>();
-        if (items != null){
-            for (Item item : items){
+        if (items != null) {
+            for (Item item : items) {
                 mappedItems.add(item.getName());
             }
         }
