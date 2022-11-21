@@ -23,7 +23,7 @@ public class RelationController {
     @ApiOperation(value = "Create a new relations to hero", notes = "Need id other hero and description. Return all hero's relations")
     @PostMapping()
     public Set<RelationDTO> createNewRelation(@PathVariable Long ownerId, @RequestBody RelationDTO newRelation){
-        return relationService.addNewRelation(ownerId, newRelation);
+        return relationService.createNewRelation(ownerId, newRelation);
     }
 
     @ApiOperation(value = "Read all relations of current hero", notes = "show all relations")

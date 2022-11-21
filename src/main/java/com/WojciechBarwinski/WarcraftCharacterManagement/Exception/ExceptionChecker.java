@@ -48,5 +48,11 @@ public class ExceptionChecker {
             throw new ItemNotFoundException();
         }
     }
+
+    public void ifRaceNameDoesNotExist(String name) {
+        if (name == null || name.isEmpty()){
+            throw new IncorrectDateException("Musisz podać nazwę rasy");
+        }
+    }
 }
 

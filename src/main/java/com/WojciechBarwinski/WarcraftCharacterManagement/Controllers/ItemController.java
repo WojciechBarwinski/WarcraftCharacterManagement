@@ -2,7 +2,6 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Controllers;
 
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.ItemDTO;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Item;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Services.ItemService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;

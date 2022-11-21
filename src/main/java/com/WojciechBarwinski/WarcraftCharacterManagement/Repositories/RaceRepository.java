@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface RaceRepository extends JpaRepository<Race, Long> {
 
     Optional<Race> findByName(String raceName);
+
+    void deleteByName(String raceName);
 }

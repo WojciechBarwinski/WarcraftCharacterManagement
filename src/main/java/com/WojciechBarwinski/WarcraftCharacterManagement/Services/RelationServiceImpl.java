@@ -36,7 +36,7 @@ public class RelationServiceImpl implements RelationService {
     }
 
     @Override
-    public Set<RelationDTO> addNewRelation(Long ownerId, RelationDTO relation) {
+    public Set<RelationDTO> createNewRelation(Long ownerId, RelationDTO relation) {
         Long heroId = relation.getHeroId();
         String heroName = relation.getHeroFirstName();
         exceptCheck.ifDescriptionDoesNotExist(relation.getDescription());
@@ -64,7 +64,7 @@ public class RelationServiceImpl implements RelationService {
         exceptCheck.ifDescriptionDoesNotExist(updateRelation.getDescription());
 
         if (!relationRepository.existsByKey_OwnerIdAndKey_OtherId(ownerId, heroId)){
-            return addNewRelation(ownerId, updateRelation);
+            return createNewRelation(ownerId, updateRelation);
         }
         Relation relation = relationRepository.findByKey_OwnerIdAndKey_OtherId(ownerId, heroId);
         relation.setDescription(updateRelation.getDescription());
