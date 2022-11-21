@@ -128,7 +128,9 @@ public class HeroServiceImpl implements HeroService {
             heroToUpdate.setBooks(checkBook(dto.getBooks()));
         }
 
-        //TODO Reloation build!!
+        heroToUpdate.setItems(heroFromDB.getItems());
+        heroToUpdate.setOwnRelations(heroFromDB.getOwnRelations());
+        heroToUpdate.setRelationsWithOthers(heroFromDB.getRelationsWithOthers());
 
         return heroToUpdate;
     }

@@ -27,7 +27,7 @@ public class HeroController {
         this.relationService = relationService;
     }
 
-    @ApiOperation(value = "Create a new hero", notes = "Returns url and json with to new created hero")
+    @ApiOperation(value = "Create a new hero", notes = "THIS METHOD DOESN'T CREATE NEW RELATION OR ITEM. Returns url and json with to new created hero")
     @PostMapping()
     public ResponseEntity<HeroDTO> createNewHero(@RequestBody HeroDTO heroDTO){
         HeroDTO newHeroDTO = heroService.createNewHero(heroDTO);
@@ -53,7 +53,7 @@ public class HeroController {
         return heroService.getHeroByFirstName(name);
     }
 
-    @ApiOperation(value = "Update a hero, need only new information", notes = "Returns url and json with to updated hero")
+    @ApiOperation(value = "Update a hero, need only new information", notes = "THIS METHOD DOESN'T UPDATE RELATION OR ITEM. Returns url and json with to updated hero")
     @PutMapping("/{id}")
     public ResponseEntity<HeroDTO> updateHero(@PathVariable Long id ,@RequestBody HeroDTO heroDTO){
         HeroDTO newHeroDTO = heroService.updateHero(heroDTO, id);
