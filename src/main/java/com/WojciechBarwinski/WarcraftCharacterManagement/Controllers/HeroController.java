@@ -36,7 +36,7 @@ public class HeroController {
     }
 
     @ApiOperation(value = "Read all heroes", notes = "Returns list with all heroes")
-    @GetMapping("/")
+    @GetMapping()
     public List<HeroDTOToPreview> readAllHero(@RequestParam int page, Sort.Direction direction){
         return heroService.getAllHeroes(page, direction);
     }
@@ -48,7 +48,7 @@ public class HeroController {
     }
 
     @ApiOperation(value = "Read a hero by first name", notes = "Returns hero as per name")
-    @GetMapping()
+    @GetMapping("/")
     public HeroDTO readHeroByName(@RequestParam(value="name") String name){
         return heroService.getHeroByFirstName(name);
     }

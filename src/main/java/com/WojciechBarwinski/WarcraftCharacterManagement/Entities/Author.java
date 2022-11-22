@@ -5,17 +5,19 @@ import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity
+@Builder
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "authors")
 public class Author {
 
     @Id
-    @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -26,9 +28,20 @@ public class Author {
 
     private String nationality;
 
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
+    private Set<Book> books = new java.util.LinkedHashSet<>();
+
     public Author(String firstName, String lastName, String nationality) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.nationality = nationality;
+    }
+
+    public void setBook(Book book){
+        if (books == null){
+            books = new HashSet<>();
+        }
+        books.add(book);
+        book.setAuthor(this);
     }
 }

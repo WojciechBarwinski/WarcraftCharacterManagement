@@ -54,5 +54,11 @@ public class ExceptionChecker {
             throw new IncorrectDateException("Musisz podać nazwę rasy");
         }
     }
+
+    public void ifAuthorNamesAreNull(String firstName, String lastName){
+        if ((firstName == null || firstName.isEmpty()) || (lastName == null || lastName.isEmpty())){
+            throw new IncorrectDateException("Firs name and last name can't by empty/null");
+        }
+    }
 }
 

@@ -29,8 +29,4 @@ public class Item {
         this.name = name;
         this.description = description;
     }
-
-    public void setOwner(Hero owner) {
-        this.owner = owner;
-    }
 }

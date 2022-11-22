@@ -24,8 +24,7 @@ public class ItemController {
     @ApiOperation(value = "Create a new item", notes = "Return new item. This method require Hero")
     @PostMapping()
     public ResponseEntity<ItemDTO> createItem(@RequestBody ItemDTO itemDTO){
-        ItemDTO item = itemService.createItem(itemDTO);
-        return getCorrectURILocation(item);
+        return getCorrectURILocation(itemService.createItem(itemDTO));
     }
 
     @ApiOperation(value = "Read a item by id", notes = "Returns item as per id")

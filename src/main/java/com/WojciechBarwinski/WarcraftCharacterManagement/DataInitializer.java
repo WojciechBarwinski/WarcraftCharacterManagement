@@ -112,9 +112,11 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         Item sword = new Item("sword", "jakis tam opis miecza");
         sylvanas.addItem(bow);
         tyrande.addItem(sword);
-        ;
         itemRepository.save(bow);
         itemRepository.save(sword);
+        Author author = authorRepository.findById(3L).get();
+        author.setBook(bookRepository.findById(4L).get());
+
     }
 
     private static List<Hero> createListOfHeroesToAdd() {
@@ -163,6 +165,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         List<Author> authors = new ArrayList<>();
         authors.add(new Author("Richard A.", "Knaak", "USA"));
         authors.add(new Author("Christie", "Golden", "USA"));
+        authors.add(new Author("Christie123", "Golden123", "USA"));
         return authors;
     }
 
@@ -174,6 +177,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         books.add(new Book("The Demon Soul", "jakis tam opis"));
         books.get(1).setSeries("War of The Ancients");
         books.add(new Book("Sylvanas", "jakis tam opis"));
+        books.add(new Book("tytul", "jakis tam opis"));
         return books;
     }
 }
