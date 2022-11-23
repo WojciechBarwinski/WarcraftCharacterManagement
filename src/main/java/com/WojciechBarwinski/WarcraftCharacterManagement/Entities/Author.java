@@ -28,8 +28,8 @@ public class Author {
 
     private String nationality;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
-    private Set<Book> books = new java.util.LinkedHashSet<>();
+    @OneToMany(mappedBy = "author")
+    private Set<Book> books;
 
     public Author(String firstName, String lastName, String nationality) {
         this.firstName = firstName;
@@ -43,5 +43,10 @@ public class Author {
         }
         books.add(book);
         book.setAuthor(this);
+    }
+
+    @PreRemove
+    private void removeAssociationsWithChildren(){
+        books.forEach(x -> x.setAuthor(null));
     }
 }

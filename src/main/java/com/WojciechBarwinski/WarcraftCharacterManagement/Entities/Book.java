@@ -28,10 +28,13 @@ public class Book {
     @Lob
     private String description;
 
-    @ManyToOne
+    @ManyToOne()
     private Author author;
 
-    @ManyToMany(mappedBy = "books", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany()
+    @JoinTable(name = "hero_book",
+            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "hero_id", referencedColumnName = "id"))
     private Set<Hero> heroes = new java.util.LinkedHashSet<>();
 
     public Book(String title, String description) {
