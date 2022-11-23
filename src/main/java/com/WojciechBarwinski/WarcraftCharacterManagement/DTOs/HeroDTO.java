@@ -10,7 +10,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class HeroDTO {
+public class HeroDTO implements DTOFlag{
 
     private Long id;
     private String firstName;
@@ -21,4 +21,9 @@ public class HeroDTO {
     private Set<String> titles = new HashSet<>();
     private Set<String> items = new HashSet<>();
     private Set<RelationDTO> relations = new HashSet<>();
+
+    @Override
+    public String getId() {
+        return id.toString();
+    }
 }

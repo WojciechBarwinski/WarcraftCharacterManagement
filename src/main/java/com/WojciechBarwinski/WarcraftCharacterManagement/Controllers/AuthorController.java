@@ -1,13 +1,15 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Controllers;
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.AuthorDTO;
+import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.DTOFlag;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Services.AuthorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.Set;
+
+import static com.WojciechBarwinski.WarcraftCharacterManagement.ControllerURL.AUTHOR;
+import static com.WojciechBarwinski.WarcraftCharacterManagement.Controllers.RespEntityPathCreator.getCorrectResponseEntaty;
 
 @RestController()
 @RequestMapping("/authors")
@@ -21,8 +23,8 @@ public class AuthorController {
 
 
     @PostMapping
-    public ResponseEntity<AuthorDTO> createAuthor(@RequestBody AuthorDTO authorDTO){
-        return getCorrectURILocation(authorService.createAuthor(authorDTO));
+    public ResponseEntity<DTOFlag> createAuthor(@RequestBody AuthorDTO authorDTO){
+        return getCorrectResponseEntaty(AUTHOR, authorService.createAuthor(authorDTO));
     }
 
     @GetMapping
@@ -40,6 +42,7 @@ public class AuthorController {
         return authorService.getAuthorByLastName(name);
     }
 
+    //TODO UPDATE AUTHOR
 
     @DeleteMapping(value = "/{id}")
     void deleteAuthorById(@PathVariable Long id){
@@ -49,13 +52,5 @@ public class AuthorController {
     @DeleteMapping
     void deleteAuthorByFirstAndLastNames(@RequestParam String firstName, @RequestParam String lastName){
         authorService.deleteAuthorByFirstAndLastNames(firstName, lastName);
-    }
-
-    private ResponseEntity<AuthorDTO> getCorrectURILocation(AuthorDTO authorDTO){
-        URI location = ServletUriComponentsBuilder.fromCurrentServletMapping()
-                .path("/authors/{id}")
-                .buildAndExpand(authorDTO.getId())
-                .toUri();
-        return ResponseEntity.created(location).body(authorDTO);
     }
 }

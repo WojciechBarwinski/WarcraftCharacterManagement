@@ -7,10 +7,15 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemDTO {
+public class ItemDTO implements DTOFlag{
 
     private Long id;
     private String name;
     private String description;
     private Long ownerId;
+
+    @Override
+    public String getId() {
+        return id.toString();
+    }
 }

@@ -7,10 +7,15 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class AuthorDTO {
+public class AuthorDTO implements DTOFlag{
 
     private Long id;
     private String firstName;
     private String lastName;
     private String nationality;
+
+    @Override
+    public String getId() {
+        return id.toString();
+    }
 }

@@ -1,14 +1,16 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Controllers;
 
 
+import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.DTOFlag;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.RaceDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Services.RaceService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.Set;
+
+import static com.WojciechBarwinski.WarcraftCharacterManagement.ControllerURL.RACE;
+import static com.WojciechBarwinski.WarcraftCharacterManagement.Controllers.RespEntityPathCreator.getCorrectResponseEntaty;
 
 @RestController()
 @RequestMapping("/races")
@@ -21,9 +23,8 @@ public class RaceController {
     }
 
     @PostMapping
-    public ResponseEntity<RaceDTO> createRace(@RequestBody RaceDTO raceDTO) {
-        RaceDTO race = raceService.createRace(raceDTO);
-        return getCorrectURILocation(race);
+    public ResponseEntity<DTOFlag> createRace(@RequestBody RaceDTO raceDTO) {
+        return getCorrectResponseEntaty(RACE, raceService.createRace(raceDTO));
     }
 
     @GetMapping
@@ -37,9 +38,8 @@ public class RaceController {
     }
 
     @PutMapping(value = "/{name}")
-    public ResponseEntity<RaceDTO> updateRace(@PathVariable String name, @RequestBody String description) {
-        RaceDTO race = raceService.updateRace(name, description);
-        return getCorrectURILocation(race);
+    public ResponseEntity<DTOFlag> updateRace(@PathVariable String name, @RequestBody String description) {
+        return getCorrectResponseEntaty(RACE, raceService.updateRace(name, description));
     }
 
     @DeleteMapping(value = "/{name}")
@@ -47,11 +47,4 @@ public class RaceController {
         raceService.deleteRace(name);
     }
 
-    private ResponseEntity<RaceDTO> getCorrectURILocation(RaceDTO raceDTO) {
-        URI location = ServletUriComponentsBuilder.fromCurrentServletMapping()
-                .path("/races/{name}")
-                .buildAndExpand(raceDTO.getName())
-                .toUri();
-        return ResponseEntity.created(location).body(raceDTO);
-    }
 }

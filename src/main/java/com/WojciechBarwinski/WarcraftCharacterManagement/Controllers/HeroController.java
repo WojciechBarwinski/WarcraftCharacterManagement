@@ -1,5 +1,6 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Controllers;
 
+import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.DTOFlag;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTOToPreview;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Services.HeroService;
@@ -8,10 +9,11 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
+
+import static com.WojciechBarwinski.WarcraftCharacterManagement.ControllerURL.HERO;
+import static com.WojciechBarwinski.WarcraftCharacterManagement.Controllers.RespEntityPathCreator.getCorrectResponseEntaty;
 
 
 @RestController()
@@ -29,10 +31,8 @@ public class HeroController {
 
     @ApiOperation(value = "Create a new hero", notes = "THIS METHOD DOESN'T CREATE NEW RELATION OR ITEM. Returns url and json with to new created hero")
     @PostMapping()
-    public ResponseEntity<HeroDTO> createNewHero(@RequestBody HeroDTO heroDTO){
-        HeroDTO newHeroDTO = heroService.createNewHero(heroDTO);
-
-        return getCorrectURILocation(newHeroDTO);
+    public ResponseEntity<DTOFlag> createNewHero(@RequestBody HeroDTO heroDTO){
+        return getCorrectResponseEntaty(HERO, heroService.createNewHero(heroDTO));
     }
 
     @ApiOperation(value = "Read all heroes", notes = "Returns list with all heroes")
@@ -55,22 +55,13 @@ public class HeroController {
 
     @ApiOperation(value = "Update a hero, need only new information", notes = "THIS METHOD DOESN'T UPDATE RELATION OR ITEM. Returns url and json with to updated hero")
     @PutMapping("/{id}")
-    public ResponseEntity<HeroDTO> updateHero(@PathVariable Long id ,@RequestBody HeroDTO heroDTO){
-        HeroDTO newHeroDTO = heroService.updateHero(heroDTO, id);
-        return getCorrectURILocation(newHeroDTO);
+    public ResponseEntity<DTOFlag> updateHero(@PathVariable Long id ,@RequestBody HeroDTO heroDTO){
+        return getCorrectResponseEntaty(HERO, heroService.updateHero(heroDTO, id));
     }
 
     @ApiOperation(value = "Delete hero by id", notes = "Return nothing")
     @DeleteMapping("/{id}")
     public void deleteHero(@PathVariable Long id){
         heroService.deleteHero(id);
-    }
-
-    private ResponseEntity<HeroDTO> getCorrectURILocation(HeroDTO heroDTO){
-        URI location = ServletUriComponentsBuilder.fromCurrentServletMapping()
-                .path("/heroes/{id}")
-                .buildAndExpand(heroDTO.getId())
-                .toUri();
-        return ResponseEntity.created(location).body(heroDTO);
     }
 }
