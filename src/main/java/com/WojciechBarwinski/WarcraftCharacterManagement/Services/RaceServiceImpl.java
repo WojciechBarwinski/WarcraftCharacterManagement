@@ -42,7 +42,7 @@ public class RaceServiceImpl implements RaceService {
 
     @Override
     public RaceDTO getRace(String raceName) {
-        Race race = raceRepository.findByName(raceName)
+        Race race = raceRepository.findByNameIgnoreCase(raceName)
                 .orElseThrow(() -> new ResourceNotFoundException("Nie znaleziono rasy o " + raceName));
 
         return mapRaceToDTO(race);
@@ -70,6 +70,6 @@ public class RaceServiceImpl implements RaceService {
         if (heroRepository.existsByRace_Name(raceName)) {
             throw new IncorrectDateException("Istnieja postacie bedące tej rasy");
         } else
-            raceRepository.deleteByName(raceName);
+            raceRepository.deleteByNameIgnoreCase(raceName);
     }
 }

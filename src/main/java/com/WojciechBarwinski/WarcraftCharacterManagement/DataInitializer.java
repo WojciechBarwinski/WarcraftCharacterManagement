@@ -58,20 +58,20 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         Hero thrall = heroRepository.findById(3L).get();
         Hero alinya = heroRepository.findById(4L).get();
         Hero shandris = heroRepository.findById(5L).get();
-        sylvanas.setRace(raceRepository.findByName("Undead").get());
-        tyrande.setRace(raceRepository.findByName("Night Elf").get());
-        shandris.setRace(raceRepository.findByName("Night Elf").get());
-        alinya.setRace(raceRepository.findByName("Night Elf").get());
-        thrall.setRace(raceRepository.findByName("Orc").get());
+        sylvanas.setRace(raceRepository.findByNameIgnoreCase("Undead").get());
+        tyrande.setRace(raceRepository.findByNameIgnoreCase("Night Elf").get());
+        shandris.setRace(raceRepository.findByNameIgnoreCase("Night Elf").get());
+        alinya.setRace(raceRepository.findByNameIgnoreCase("Night Elf").get());
+        thrall.setRace(raceRepository.findByNameIgnoreCase("Orc").get());
 
         Fraction elune = fractionRepository.findByName("Sisterhood of Elune").get();
         Fraction horde = fractionRepository.findByName("Horde").get();
         Fraction alliance = fractionRepository.findByName("Alliance").get();
         Fraction forsaken = fractionRepository.findByName("Forsaken").get();
 
-        placeRepository.findByName("Kalimdor").setUpperLocation(placeRepository.findByName("Azeroth"));
-        placeRepository.findByName("Tendrasill").setUpperLocation(placeRepository.findByName("Kalimdor"));
-        placeRepository.findByName("Durotar").setUpperLocation(placeRepository.findByName("Kalimdor"));
+        placeRepository.findByNameIgnoreCase("Kalimdor").setUpperLocation(placeRepository.findByNameIgnoreCase("Azeroth"));
+        placeRepository.findByNameIgnoreCase("Tendrasill").setUpperLocation(placeRepository.findByNameIgnoreCase("Kalimdor"));
+        placeRepository.findByNameIgnoreCase("Durotar").setUpperLocation(placeRepository.findByNameIgnoreCase("Kalimdor"));
 
         tyrande.addFraction(elune);
         tyrande.addFraction(alliance);

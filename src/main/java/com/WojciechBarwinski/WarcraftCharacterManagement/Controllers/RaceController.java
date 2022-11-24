@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
-import static com.WojciechBarwinski.WarcraftCharacterManagement.ControllerURL.RACE;
-import static com.WojciechBarwinski.WarcraftCharacterManagement.Controllers.RespEntityPathCreator.getCorrectResponseEntaty;
+import static com.WojciechBarwinski.WarcraftCharacterManagement.ControllerType.RACE;
+import static com.WojciechBarwinski.WarcraftCharacterManagement.Controllers.RespEntityPathCreator.getCorrectResponseEntity;
 
 @RestController()
 @RequestMapping("/races")
@@ -24,7 +24,7 @@ public class RaceController {
 
     @PostMapping
     public ResponseEntity<DTOFlag> createRace(@RequestBody RaceDTO raceDTO) {
-        return getCorrectResponseEntaty(RACE, raceService.createRace(raceDTO));
+        return getCorrectResponseEntity(RACE, raceService.createRace(raceDTO));
     }
 
     @GetMapping
@@ -39,12 +39,11 @@ public class RaceController {
 
     @PutMapping(value = "/{name}")
     public ResponseEntity<DTOFlag> updateRace(@PathVariable String name, @RequestBody String description) {
-        return getCorrectResponseEntaty(RACE, raceService.updateRace(name, description));
+        return getCorrectResponseEntity(RACE, raceService.updateRace(name, description));
     }
 
     @DeleteMapping(value = "/{name}")
     public void deleteRace(@PathVariable String name) {
         raceService.deleteRace(name);
     }
-
 }

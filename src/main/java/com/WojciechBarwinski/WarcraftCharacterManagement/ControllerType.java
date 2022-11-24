@@ -1,6 +1,6 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement;
 
-public enum ControllerURL {
+public enum ControllerType {
 
     AUTHOR,
     BOOK,

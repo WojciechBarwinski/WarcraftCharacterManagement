@@ -81,7 +81,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public void deleteItemByName(String name) {
-        itemRepository.deleteByName(name);
+        itemRepository.deleteByNameIgnoreCase(name);
     }
 
     @Transactional
@@ -92,7 +92,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void checkItemNameExists(String itemName) {
-        if (itemRepository.existsByName(itemName)) {
+        if (itemRepository.existsByNameIgnoreCase(itemName)) {
             throw new ResourceNotFoundException("Item o nazwie " + itemName + " juz istnieje");
         }
     }

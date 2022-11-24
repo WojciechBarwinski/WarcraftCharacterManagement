@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
-import static com.WojciechBarwinski.WarcraftCharacterManagement.ControllerURL.AUTHOR;
-import static com.WojciechBarwinski.WarcraftCharacterManagement.Controllers.RespEntityPathCreator.getCorrectResponseEntaty;
+import static com.WojciechBarwinski.WarcraftCharacterManagement.ControllerType.AUTHOR;
+import static com.WojciechBarwinski.WarcraftCharacterManagement.Controllers.RespEntityPathCreator.getCorrectResponseEntity;
 
 @RestController()
 @RequestMapping("/authors")
@@ -24,7 +24,7 @@ public class AuthorController {
 
     @PostMapping
     public ResponseEntity<DTOFlag> createAuthor(@RequestBody AuthorDTO authorDTO){
-        return getCorrectResponseEntaty(AUTHOR, authorService.createAuthor(authorDTO));
+        return getCorrectResponseEntity(AUTHOR, authorService.createAuthor(authorDTO));
     }
 
     @GetMapping

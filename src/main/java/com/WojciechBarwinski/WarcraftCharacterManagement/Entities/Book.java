@@ -28,7 +28,8 @@ public class Book {
     @Lob
     private String description;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private Author author;
 
     @ManyToMany()

@@ -33,7 +33,9 @@ public interface HeroRepository extends JpaRepository<Hero, Long> {
             "LEFT JOIN FETCH h.race " +
             "LEFT JOIN FETCH h.fractions " +
             "LEFT JOIN FETCH h.titles " +
-            "WHERE h.firstName = ?1")
+            "LEFT JOIN FETCH h.items " +
+            "LEFT JOIN FETCH h.ownRelations " +
+            "WHERE UPPER(h.firstName) = UPPER(?1)")
     Optional<Hero> findByFirstName(String firstName);
 
     boolean existsByRace_Name(String name);

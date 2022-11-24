@@ -8,6 +8,6 @@ import java.util.Set;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    @Query("SELECT b FROM Book b WHERE b.title IN ?1")
+    @Query("SELECT b FROM Book b WHERE UPPER(b.title) = UPPER(?1)")
     Set<Book> findByTitles(Set<String> titles);
 }

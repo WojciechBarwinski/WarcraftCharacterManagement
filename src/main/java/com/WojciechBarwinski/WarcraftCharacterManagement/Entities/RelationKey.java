@@ -7,6 +7,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
+import static javax.persistence.FetchType.LAZY;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -15,11 +17,11 @@ import java.io.Serializable;
 @Getter
 public class RelationKey implements Serializable {
 
-    @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn
     private Hero owner;
 
-    @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn
     private Hero other;
 }

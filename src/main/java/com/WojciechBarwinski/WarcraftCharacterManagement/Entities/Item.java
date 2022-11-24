@@ -19,7 +19,8 @@ public class Item {
 
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private Hero owner;
 
     @Lob

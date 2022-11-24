@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
-import static com.WojciechBarwinski.WarcraftCharacterManagement.ControllerURL.ITEM;
-import static com.WojciechBarwinski.WarcraftCharacterManagement.Controllers.RespEntityPathCreator.getCorrectResponseEntaty;
+import static com.WojciechBarwinski.WarcraftCharacterManagement.ControllerType.ITEM;
+import static com.WojciechBarwinski.WarcraftCharacterManagement.Controllers.RespEntityPathCreator.getCorrectResponseEntity;
 
 @RestController()
 @RequestMapping("/items")
@@ -26,7 +26,7 @@ public class ItemController {
     @ApiOperation(value = "Create a new item", notes = "Return new item. This method require Hero")
     @PostMapping()
     public ResponseEntity<DTOFlag> createItem(@RequestBody ItemDTO itemDTO) {
-        return getCorrectResponseEntaty(ITEM, itemService.createItem(itemDTO));
+        return getCorrectResponseEntity(ITEM, itemService.createItem(itemDTO));
     }
 
     @ApiOperation(value = "Read a item by id", notes = "Returns item as per id")
@@ -50,7 +50,7 @@ public class ItemController {
     @ApiOperation(value = "Update a item, need only new information", notes = "Returns url and json with to updated item")
     @PutMapping("/{id}")
     public ResponseEntity<DTOFlag> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
-        return getCorrectResponseEntaty(ITEM, itemService.updateItem(id, itemDTO));
+        return getCorrectResponseEntity(ITEM, itemService.updateItem(id, itemDTO));
     }
 
     @ApiOperation(value = "Delete item by item id", notes = "Return nothing")

@@ -44,7 +44,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public AuthorDTO getAuthorByLastName(String name) {
-        Author author = authorRepository.findByLastName(name)
+        Author author = authorRepository.findByLastNameIgnoreCase(name)
                 .orElseThrow(() -> new ResourceNotFoundException("Author o name: " + name + " nie istnieje"));
         return mapAuthorToDTO(author);
     }
@@ -52,7 +52,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public AuthorDTO createAuthor(AuthorDTO authorDTO) {
         exceptCheck.ifAuthorNamesAreNull(authorDTO.getFirstName(), authorDTO.getLastName());
-        if (authorRepository.existsByFirstNameAndLastName(authorDTO.getFirstName(), authorDTO.getLastName())) {
+        if (authorRepository.existsByFirstNameIgnoreCaseAndLastNameIgnoreCase(authorDTO.getFirstName(), authorDTO.getLastName())) {
             throw new UpdateConflictException("Author with this name and last name already exist");
         }
         return mapAuthorToDTO(authorRepository.save(mapDTOToAuthor(authorDTO)));
@@ -72,6 +72,6 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional
     @Override
     public void deleteAuthorByFirstAndLastNames(String firstName, String lastName) {
-        authorRepository.deleteByFirstNameAndLastName(firstName, lastName);
+        authorRepository.deleteByFirstNameIgnoreCaseAndLastNameIgnoreCase(firstName, lastName);
     }
 }

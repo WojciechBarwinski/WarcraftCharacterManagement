@@ -14,7 +14,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     Set<Item> findAllByOwnerId(Long ownerId);
 
-    boolean existsByName(String name);
+    boolean existsByNameIgnoreCase(String name);
 
-    void deleteByName(String name);
+    void deleteByNameIgnoreCase(String name);
 }

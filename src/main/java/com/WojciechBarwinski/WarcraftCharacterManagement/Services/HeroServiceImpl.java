@@ -146,7 +146,7 @@ public class HeroServiceImpl implements HeroService {
     }
 
     private Race checkRace(String raceName) {
-        return raceRepository.findByName(raceName)
+        return raceRepository.findByNameIgnoreCase(raceName)
                 .orElseThrow(() -> new ResourceNotFoundException(raceName + " -> this race doesn't exist"));
     }
 
