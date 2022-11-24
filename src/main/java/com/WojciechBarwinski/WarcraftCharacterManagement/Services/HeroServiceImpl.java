@@ -1,6 +1,7 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Services;
 
 
+import org.apache.commons.lang3.StringUtils;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTOToPreview;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Book;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,13 +96,13 @@ public class HeroServiceImpl implements HeroService {
 
         heroToUpdate.setId(id);
 
-        if (dto.getFirstName() == null) {
+        if (StringUtils.isBlank(dto.getFirstName())) {
             heroToUpdate.setFirstName(heroFromDB.getFirstName());
         } else {
             heroToUpdate.setFirstName(dto.getFirstName());
         }
 
-        if (dto.getLastName() == null) {
+        if (StringUtils.isBlank(dto.getLastName())) {
             heroToUpdate.setLastName(heroFromDB.getLastName());
         } else {
             heroToUpdate.setLastName(dto.getLastName());
@@ -112,7 +114,7 @@ public class HeroServiceImpl implements HeroService {
             heroToUpdate.setTitles(dto.getTitles());
         }
 
-        if (dto.getRace() == null) {
+        if (StringUtils.isBlank(dto.getRace())) {
             heroToUpdate.setRace(heroFromDB.getRace());
         } else {
             heroToUpdate.setRace(checkRace(dto.getRace()));

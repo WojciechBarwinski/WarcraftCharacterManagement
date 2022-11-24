@@ -19,7 +19,6 @@ public class AuthorMapper {
 
     public static Author mapDTOToAuthor(AuthorDTO authorDTO){
         return Author.builder()
-                //.id(authorDTO.getId())
                 .firstName(authorDTO.getFirstName())
                 .lastName(authorDTO.getLastName())
                 .nationality(authorDTO.getNationality())

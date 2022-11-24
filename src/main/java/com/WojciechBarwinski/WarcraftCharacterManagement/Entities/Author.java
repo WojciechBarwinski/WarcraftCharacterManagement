@@ -12,6 +12,7 @@ import java.util.Set;
 @Entity
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "authors")

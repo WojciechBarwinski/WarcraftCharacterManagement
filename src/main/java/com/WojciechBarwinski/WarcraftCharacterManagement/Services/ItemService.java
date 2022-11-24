@@ -13,9 +13,10 @@ public interface ItemService {
 
     ItemDTO createItem(ItemDTO itemDTO);
 
+    ItemDTO updateItem(Long id, ItemDTO itemDTO);
     void deleteItemById(Long id);
 
     void deleteItemByName(String name);
 
-    ItemDTO updateItem(Long id, ItemDTO itemDTO);
+
 }

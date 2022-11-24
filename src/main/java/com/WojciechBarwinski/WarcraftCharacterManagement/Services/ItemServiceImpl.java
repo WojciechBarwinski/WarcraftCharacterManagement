@@ -10,6 +10,7 @@ import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ResourceNotFo
 import com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.ItemMapper;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.HeroRepository;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.ItemRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -104,13 +105,13 @@ public class ItemServiceImpl implements ItemService {
 
         itemToUpdate.setId(id);
 
-        if (dto.getName() == null) {
+        if (StringUtils.isBlank(dto.getName())) {
             itemToUpdate.setName(itemFromDB.getName());
         } else {
             itemToUpdate.setName(dto.getName());
         }
 
-        if (dto.getDescription() == null) {
+        if (StringUtils.isBlank(dto.getDescription())) {
             itemToUpdate.setDescription(itemFromDB.getDescription());
         } else {
             itemToUpdate.setDescription(dto.getDescription());

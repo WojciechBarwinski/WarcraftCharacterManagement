@@ -42,7 +42,10 @@ public class AuthorController {
         return authorService.getAuthorByLastName(name);
     }
 
-    //TODO UPDATE AUTHOR
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<DTOFlag> updateAuthor(@RequestBody AuthorDTO authorDTO, @PathVariable Long id){
+        return getCorrectResponseEntity(AUTHOR, authorService.updateAuthor(authorDTO, id));
+    }
 
     @DeleteMapping(value = "/{id}")
     void deleteAuthorById(@PathVariable Long id){

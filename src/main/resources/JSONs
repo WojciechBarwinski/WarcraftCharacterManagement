@@ -3,11 +3,12 @@
     "The Well of Eternity",
     "The Demon Soul"
   ],
-  "firstName": "Malfurion",
+
   "fractions": [
     "Alliance"
   ],
   "id": 0,
+  "firstName": "Malfurion",
   "lastName": "Stormrage",
   "race": "Night Elf",
   "titles": [

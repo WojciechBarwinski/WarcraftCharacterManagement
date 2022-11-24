@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Set;
 
+import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper.mapRelations;
+
 @Service
 public class RelationServiceImpl implements RelationService {
 
@@ -28,7 +30,6 @@ public class RelationServiceImpl implements RelationService {
         this.heroRepository = heroRepository;
         this.exceptCheck = exceptCheck;
     }
-
 
     @Override
     public void addOneDirectionRelation(Hero hero1, Hero hero2, String hero2ToHero1) {
@@ -48,14 +49,13 @@ public class RelationServiceImpl implements RelationService {
         } else {
             relationRepository.save(createRelationByName(ownerId, heroName, relation.getDescription()));
         }
-        return HeroMapper.mapRelations(relationRepository.findByKey_OwnerId(ownerId));
+        return mapRelations(relationRepository.findByKey_OwnerId(ownerId));
     }
 
     @Override
     public Set<RelationDTO> allRelationByHero(Long id) {
         exceptCheck.ifHeroDoesNotExist(id);
-        Set<Relation> all = relationRepository.findByKey_OwnerId(id);
-        return HeroMapper.mapRelations(all);
+        return mapRelations(relationRepository.findByKey_OwnerId(id));
     }
 
     @Override
@@ -69,7 +69,7 @@ public class RelationServiceImpl implements RelationService {
         Relation relation = relationRepository.findByKey_OwnerIdAndKey_OtherId(ownerId, heroId);
         relation.setDescription(updateRelation.getDescription());
         relationRepository.save(relation);
-        return HeroMapper.mapRelations(relationRepository.findByKey_OwnerId(ownerId));
+        return mapRelations(relationRepository.findByKey_OwnerId(ownerId));
     }
 
     @Transactional

@@ -7,6 +7,7 @@ import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ResourceNotFo
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.UpdateConflictException;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.AuthorMapper;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.AuthorRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -59,8 +60,9 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public AuthorDTO updateAuthor(AuthorDTO authorDTO) {
-        return null;
+    public AuthorDTO updateAuthor(AuthorDTO authorDTO, Long id) {
+        Author author = buildUpdateAuthor(authorDTO, id);
+        return mapAuthorToDTO(authorRepository.save(author));
     }
 
     @Transactional
@@ -73,5 +75,33 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void deleteAuthorByFirstAndLastNames(String firstName, String lastName) {
         authorRepository.deleteByFirstNameIgnoreCaseAndLastNameIgnoreCase(firstName, lastName);
+    }
+
+
+    private Author buildUpdateAuthor(AuthorDTO authorDTO, Long id){
+        Author authorFromDB = authorRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Author o id " + id + " nie istnieje"));
+        Author authorToUpdate = new Author();
+        authorToUpdate.setId(id);
+
+        if (StringUtils.isBlank(authorDTO.getFirstName())){
+            authorToUpdate.setFirstName(authorToUpdate.getFirstName());
+        } else {
+            authorToUpdate.setFirstName(authorDTO.getFirstName());
+        }
+
+        if (StringUtils.isBlank(authorDTO.getLastName())){
+            authorToUpdate.setLastName(authorFromDB.getLastName());
+        } else {
+            authorToUpdate.setLastName(authorDTO.getLastName());
+        }
+
+        if (StringUtils.isBlank(authorDTO.getNationality())){
+            authorToUpdate.setNationality(authorFromDB.getNationality());
+        } else {
+            authorToUpdate.setNationality(authorDTO.getNationality());
+        }
+
+        return authorToUpdate;
     }
 }
