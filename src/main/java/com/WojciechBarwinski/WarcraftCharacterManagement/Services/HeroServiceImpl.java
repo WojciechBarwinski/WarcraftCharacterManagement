@@ -90,53 +90,34 @@ public class HeroServiceImpl implements HeroService {
     }
 
     private Hero buildUpdateHero(HeroDTO dto, Long id) {
-        Hero heroToUpdate = new Hero();
-        Hero heroFromDB = heroRepository.findById(id)
+        Hero hero = heroRepository.findById(id)
                 .orElseThrow(() -> new HeroNotFoundException(id.toString()));
 
-        heroToUpdate.setId(id);
-
-        if (StringUtils.isBlank(dto.getFirstName())) {
-            heroToUpdate.setFirstName(heroFromDB.getFirstName());
-        } else {
-            heroToUpdate.setFirstName(dto.getFirstName());
+        if (!StringUtils.isBlank(dto.getFirstName())) {
+            hero.setFirstName(dto.getFirstName());
         }
 
-        if (StringUtils.isBlank(dto.getLastName())) {
-            heroToUpdate.setLastName(heroFromDB.getLastName());
-        } else {
-            heroToUpdate.setLastName(dto.getLastName());
+        if (!StringUtils.isBlank(dto.getLastName())) {
+            hero.setLastName(dto.getLastName());
         }
 
-        if (dto.getTitles().isEmpty()) {
-            heroToUpdate.setTitles(heroFromDB.getTitles());
-        } else {
-            heroToUpdate.setTitles(dto.getTitles());
+        if (!dto.getTitles().isEmpty()) {
+            hero.setTitles(dto.getTitles());
         }
 
-        if (StringUtils.isBlank(dto.getRace())) {
-            heroToUpdate.setRace(heroFromDB.getRace());
-        } else {
-            heroToUpdate.setRace(checkRace(dto.getRace()));
+        if (!StringUtils.isBlank(dto.getRace())) {
+            hero.setRace(checkRace(dto.getRace()));
         }
 
-        if (dto.getFractions().isEmpty()) {
-            heroToUpdate.setFractions(heroFromDB.getFractions());
-        } else {
-            heroToUpdate.setFractions(checkFraction(dto.getFractions()));
+        if (!dto.getFractions().isEmpty()) {
+            hero.setFractions(checkFraction(dto.getFractions()));
         }
 
         if (dto.getBooks().isEmpty()) {
-            heroToUpdate.setBooks(heroFromDB.getBooks());
-        } else {
-            heroToUpdate.setBooks(checkBook(dto.getBooks()));
+            hero.setBooks(checkBook(dto.getBooks()));
         }
 
-        heroToUpdate.setItems(heroFromDB.getItems());
-        heroToUpdate.setOwnRelations(heroFromDB.getOwnRelations());
-        heroToUpdate.setRelationsWithOthers(heroFromDB.getRelationsWithOthers());
-
-        return heroToUpdate;
+        return hero;
     }
 
     private Hero buildNewHero(HeroDTO heroDTO) {
@@ -168,6 +149,11 @@ public class HeroServiceImpl implements HeroService {
             throwExceptionWithIncorrectBooksTitles(booksTitles, books);
         }
         return books;
+    }
+
+    private Set<Book> updateBooksSet(Set<Book> originalBooks, Set<Book> booksToCheck){
+        // TODO sprawdza pozycje z booksToCheck z originalBooks. Jeśli pozycji nie ma w orig. to ją dodaje, jeśli jest to ją odejmuje.
+        return null;
     }
 
     private void throwExceptionWithIncorrectFractionsName(Set<String> names, Set<Fraction> fractions) {

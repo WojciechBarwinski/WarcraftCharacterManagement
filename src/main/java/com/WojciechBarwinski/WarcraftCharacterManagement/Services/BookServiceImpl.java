@@ -21,11 +21,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Set<BookDTO> getAllBooks() {
-        Set<BookDTO> collect = bookRepository.findAll().stream()
+        return bookRepository.findAll().stream()
                 .map(BookMapper::mapBookToDTOToPreview)
                 .collect(Collectors.toSet());
-        
-        return collect;
     }
 
     @Transactional
