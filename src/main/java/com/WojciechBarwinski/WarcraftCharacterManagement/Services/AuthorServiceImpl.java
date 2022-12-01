@@ -61,8 +61,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public AuthorDTO updateAuthor(AuthorDTO authorDTO, Long id) {
-        Author author = buildUpdateAuthor(authorDTO, id);
-        return mapAuthorToDTO(authorRepository.save(author));
+        return mapAuthorToDTO(authorRepository.save(buildUpdateAuthor(authorDTO, id)));
     }
 
     @Transactional
@@ -78,30 +77,22 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
 
-    private Author buildUpdateAuthor(AuthorDTO authorDTO, Long id){
-        Author authorFromDB = authorRepository.findById(id)
+    private Author buildUpdateAuthor(AuthorDTO dto, Long id){
+        Author author = authorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Author o id " + id + " nie istnieje"));
-        Author authorToUpdate = new Author();
-        authorToUpdate.setId(id);
 
-        if (StringUtils.isBlank(authorDTO.getFirstName())){
-            authorToUpdate.setFirstName(authorToUpdate.getFirstName());
-        } else {
-            authorToUpdate.setFirstName(authorDTO.getFirstName());
+        if (!StringUtils.isBlank(dto.getFirstName())){
+            author.setFirstName(dto.getFirstName());
         }
 
-        if (StringUtils.isBlank(authorDTO.getLastName())){
-            authorToUpdate.setLastName(authorFromDB.getLastName());
-        } else {
-            authorToUpdate.setLastName(authorDTO.getLastName());
+        if (!StringUtils.isBlank(dto.getLastName())){
+            author.setLastName(dto.getLastName());
         }
 
-        if (StringUtils.isBlank(authorDTO.getNationality())){
-            authorToUpdate.setNationality(authorFromDB.getNationality());
-        } else {
-            authorToUpdate.setNationality(authorDTO.getNationality());
+        if (!StringUtils.isBlank(dto.getNationality())){
+            author.setNationality(dto.getNationality());
         }
 
-        return authorToUpdate;
+        return author;
     }
 }

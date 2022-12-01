@@ -88,8 +88,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public ItemDTO updateItem(Long id, ItemDTO dto) {
-        Item itemToUpdate = buildUpdateItem(id, dto);
-        return mapItemToDTO(itemRepository.save(itemToUpdate));
+        return mapItemToDTO(itemRepository.save(buildUpdateItem(dto, id)));
     }
 
     private void checkItemNameExists(String itemName) {
@@ -98,32 +97,27 @@ public class ItemServiceImpl implements ItemService {
         }
     }
 
-    private Item buildUpdateItem(Long id, ItemDTO dto) {
-        Item itemToUpdate = new Item();
-        Item itemFromDB = itemRepository.findById(id)
+
+
+    private Item buildUpdateItem(ItemDTO dto, Long id) {
+        Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException(id.toString()));
 
-        itemToUpdate.setId(id);
-
-        if (StringUtils.isBlank(dto.getName())) {
-            itemToUpdate.setName(itemFromDB.getName());
-        } else {
-            itemToUpdate.setName(dto.getName());
+        if (!StringUtils.isBlank(dto.getName())) {
+            item.setName(dto.getName());
         }
 
-        if (StringUtils.isBlank(dto.getDescription())) {
-            itemToUpdate.setDescription(itemFromDB.getDescription());
-        } else {
-            itemToUpdate.setDescription(dto.getDescription());
+        if (!StringUtils.isBlank(dto.getDescription())) {
+            item.setDescription(dto.getDescription());
         }
 
-        if (dto.getOwnerId() == null) {
-            itemToUpdate.setOwner(itemFromDB.getOwner());
-        } else {
-            itemToUpdate.setOwner(heroRepository.findById(dto.getOwnerId())
+        if (dto.getOwnerId() != null) {
+            item.setOwner(heroRepository.findById(dto.getOwnerId())
                     .orElseThrow(() -> new HeroNotFoundException(dto.getOwnerId().toString())));
         }
 
-        return itemToUpdate;
+        return item;
     }
+
+
 }

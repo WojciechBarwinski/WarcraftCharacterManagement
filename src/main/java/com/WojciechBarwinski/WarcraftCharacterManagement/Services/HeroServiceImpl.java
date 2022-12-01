@@ -77,8 +77,7 @@ public class HeroServiceImpl implements HeroService {
     @Transactional
     @Override
     public HeroDTO updateHero(HeroDTO heroDTO, Long id) {
-        Hero hero = buildUpdateHero(heroDTO, id);
-        return mapHeroToDTO(heroRepository.save(hero));
+        return mapHeroToDTO(heroRepository.save(buildUpdateHero(heroDTO, id)));
     }
 
     @Override
@@ -101,20 +100,20 @@ public class HeroServiceImpl implements HeroService {
             hero.setLastName(dto.getLastName());
         }
 
-        if (!dto.getTitles().isEmpty()) {
-            hero.setTitles(dto.getTitles());
-        }
-
         if (!StringUtils.isBlank(dto.getRace())) {
             hero.setRace(checkRace(dto.getRace()));
         }
 
-        if (!dto.getFractions().isEmpty()) {
-            hero.setFractions(checkFraction(dto.getFractions()));
+        if (!dto.getTitles().isEmpty()) {
+            hero.setTitles(updateTitleSet(hero.getTitles(), dto.getTitles()));
         }
 
-        if (dto.getBooks().isEmpty()) {
-            hero.setBooks(checkBook(dto.getBooks()));
+        if (!dto.getFractions().isEmpty()) {
+            hero.setFractions(updateFractionSet(hero.getFractions(), dto.getFractions()));
+        }
+
+        if (!dto.getBooks().isEmpty()) {
+            hero.setBooks(updateBookSet(hero.getBooks(), dto.getBooks()));
         }
 
         return hero;
@@ -133,6 +132,40 @@ public class HeroServiceImpl implements HeroService {
                 .orElseThrow(() -> new ResourceNotFoundException(raceName + " -> this race doesn't exist"));
     }
 
+    private Set<String> updateTitleSet(Set<String> originalTitles, Set<String> titlesToCheck){
+        for (String title : titlesToCheck) {
+            if (originalTitles.contains(title)){
+                originalTitles.remove(title);
+            } else {
+                originalTitles.add(title);
+            }
+        }
+
+        return originalTitles;
+    }
+
+    private Set<Fraction> updateFractionSet(Set<Fraction> originalFractions, Set<String> fractionsToCheck){
+        for (Fraction fraction : checkFraction(fractionsToCheck)) {
+            if (originalFractions.contains(fraction)) {
+                originalFractions.remove(fraction);
+            } else {
+                originalFractions.add(fraction);
+            }
+        }
+        return originalFractions;
+    }
+
+    private Set<Book> updateBookSet(Set<Book> originalBooks, Set<String> booksToCheck){
+        for (Book book : checkBook(booksToCheck)) {
+            if (originalBooks.contains(book)){
+                originalBooks.remove(book);
+            } else {
+                originalBooks.add(book);
+            }
+        }
+        return originalBooks;
+    }
+
     private Set<Fraction> checkFraction(Set<String> fractionsName) {
         Set<Fraction> fractions = fractionRepository.findByNames(fractionsName);
 
@@ -143,17 +176,12 @@ public class HeroServiceImpl implements HeroService {
     }
 
     private Set<Book> checkBook(Set<String> booksTitles) {
-        Set<Book> books = bookRepository.findByTitles(booksTitles);
+        Set<Book> books = bookRepository.findByTitleIgnoreCaseIn(booksTitles);
 
         if (booksTitles.size() != books.size()) {
             throwExceptionWithIncorrectBooksTitles(booksTitles, books);
         }
         return books;
-    }
-
-    private Set<Book> updateBooksSet(Set<Book> originalBooks, Set<Book> booksToCheck){
-        // TODO sprawdza pozycje z booksToCheck z originalBooks. Jeśli pozycji nie ma w orig. to ją dodaje, jeśli jest to ją odejmuje.
-        return null;
     }
 
     private void throwExceptionWithIncorrectFractionsName(Set<String> names, Set<Fraction> fractions) {
