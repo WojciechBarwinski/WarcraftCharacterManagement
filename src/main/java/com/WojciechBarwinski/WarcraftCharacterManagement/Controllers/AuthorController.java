@@ -44,7 +44,7 @@ public class AuthorController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<DTOFlag> updateAuthor(@RequestBody AuthorDTO authorDTO, @PathVariable Long id){
-        return getCorrectResponseEntity(AUTHOR, authorService.updateAuthor(authorDTO, id));
+        return getCorrectResponseEntity(AUTHOR, authorService.updateAuthor(id, authorDTO));
     }
 
     @DeleteMapping(value = "/{id}")

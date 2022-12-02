@@ -39,47 +39,56 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public AuthorDTO getAuthorById(Long id) {
         Author author = authorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Author o id: " + id + " nie istnieje"));
+                .orElseThrow(() -> new ResourceNotFoundException("Nie istnieje autor o id: " + id));
         return mapAuthorToDTO(author);
     }
 
     @Override
     public AuthorDTO getAuthorByLastName(String name) {
         Author author = authorRepository.findByLastNameIgnoreCase(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Author o name: " + name + " nie istnieje"));
+                .orElseThrow(() -> new ResourceNotFoundException("Nie istnieje autor o imieniu: " + name));
         return mapAuthorToDTO(author);
     }
 
     @Override
-    public AuthorDTO createAuthor(AuthorDTO authorDTO) {
-        exceptCheck.ifAuthorNamesAreNull(authorDTO.getFirstName(), authorDTO.getLastName());
-        if (authorRepository.existsByFirstNameIgnoreCaseAndLastNameIgnoreCase(authorDTO.getFirstName(), authorDTO.getLastName())) {
-            throw new UpdateConflictException("Author with this name and last name already exist");
+    public AuthorDTO createAuthor(AuthorDTO dto) {
+        exceptCheck.ifAuthorNamesAreNull(dto.getFirstName(), dto.getLastName());
+        if (authorRepository.existsByFirstNameIgnoreCaseAndLastNameIgnoreCase(dto.getFirstName(), dto.getLastName())) {
+            throw new UpdateConflictException("Autor o podanym imieniu i nazwisku juz istnieje");
         }
-        return mapAuthorToDTO(authorRepository.save(mapDTOToAuthor(authorDTO)));
+        Author save = authorRepository.save(mapDTOToAuthor(dto));
+        return mapAuthorToDTO(save);
     }
 
     @Override
-    public AuthorDTO updateAuthor(AuthorDTO authorDTO, Long id) {
-        return mapAuthorToDTO(authorRepository.save(buildUpdateAuthor(authorDTO, id)));
+    public AuthorDTO updateAuthor(Long id, AuthorDTO dto) {
+        Author save = authorRepository.save(buildUpdateAuthor(dto, id));
+        return mapAuthorToDTO(save);
     }
 
     @Transactional
     @Override
     public void deleteAuthorById(Long id) {
+        if (!authorRepository.existsById(id)){
+            throw new ResourceNotFoundException("Nie istnieje autor o id: " + id);
+        }
         authorRepository.deleteById(id);
     }
 
     @Transactional
     @Override
     public void deleteAuthorByFirstAndLastNames(String firstName, String lastName) {
+        exceptCheck.ifAuthorNamesAreNull(firstName, lastName);
+        if (!authorRepository.existsByFirstNameIgnoreCaseAndLastNameIgnoreCase(firstName, lastName)){
+            throw new ResourceNotFoundException("Nie istnieje autor o podanym imieniu i nazwisku");
+        }
         authorRepository.deleteByFirstNameIgnoreCaseAndLastNameIgnoreCase(firstName, lastName);
     }
 
 
     private Author buildUpdateAuthor(AuthorDTO dto, Long id){
         Author author = authorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Author o id " + id + " nie istnieje"));
+                .orElseThrow(() -> new ResourceNotFoundException("Nie istnieje autor o id: " + id));
 
         if (!StringUtils.isBlank(dto.getFirstName())){
             author.setFirstName(dto.getFirstName());

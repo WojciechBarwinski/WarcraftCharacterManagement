@@ -34,17 +34,17 @@ public class RaceServiceImpl implements RaceService {
     }
 
     @Override
-    public RaceDTO createRace(RaceDTO raceDTO) {
-        exceptCheck.ifDescriptionDoesNotExist(raceDTO.getDescription());
-        exceptCheck.ifRaceNameDoesNotExist(raceDTO.getName());
+    public RaceDTO createRace(RaceDTO dto) {
+        exceptCheck.ifDescriptionDoesNotExist(dto.getDescription());
+        exceptCheck.ifRaceNameDoesNotExist(dto.getName());
 
-        return mapRaceToDTO(raceRepository.save(mapDTOToRace(raceDTO)));
+        return mapRaceToDTO(raceRepository.save(mapDTOToRace(dto)));
     }
 
     @Override
     public RaceDTO getRace(String raceName) {
         Race race = raceRepository.findByNameIgnoreCase(raceName)
-                .orElseThrow(() -> new ResourceNotFoundException("Nie znaleziono rasy o " + raceName));
+                .orElseThrow(() -> new ResourceNotFoundException("Nie istnieje rasa o nazwie: " + raceName));
 
         return mapRaceToDTO(race);
     }
@@ -64,8 +64,8 @@ public class RaceServiceImpl implements RaceService {
     @Transactional
     @Override
     public void deleteRace(String raceName) {
-        if (heroRepository.existsByRace_Name(raceName)) {
-            throw new IncorrectDateException("Istnieja postacie bedące tej rasy");
+        if (heroRepository.existsByRace_NameIgnoreCase(raceName)) {
+            throw new ResourceNotFoundException("Nie istnieje rasa o nazwie: " + raceName);
         } else
             raceRepository.deleteByNameIgnoreCase(raceName);
     }

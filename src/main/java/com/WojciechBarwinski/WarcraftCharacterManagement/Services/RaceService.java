@@ -6,10 +6,9 @@ import java.util.Set;
 
 public interface RaceService {
 
-    RaceDTO createRace(RaceDTO raceDTO);
+    RaceDTO createRace(RaceDTO dto);
     RaceDTO getRace(String raceName);
     Set<RaceDTO> getAllRaces();
-
     RaceDTO updateRace(String name, String description);
     void deleteRace(String raceName);
 }

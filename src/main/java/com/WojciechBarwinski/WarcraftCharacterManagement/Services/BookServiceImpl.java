@@ -2,6 +2,7 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Services;
 
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.BookDTO;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ResourceNotFoundException;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.BookMapper;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.BookRepository;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,9 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public void deleteBookById(Long id) {
+        if(bookRepository.existsById(id)){
+            throw new ResourceNotFoundException("Nie istnieje książka o id: " + id);
+        }
         bookRepository.deleteById(id);
     }
 }

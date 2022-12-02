@@ -3,10 +3,7 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Services;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.ItemDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Hero;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Item;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ExceptionChecker;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.HeroNotFoundException;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ItemNotFoundException;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ResourceNotFoundException;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.*;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.ItemMapper;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.HeroRepository;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.ItemRepository;
@@ -14,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,36 +35,36 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDTO getItemByID(Long id) {
         Item item = itemRepository.findById(id)
-                .orElseThrow(() -> new ItemNotFoundException(id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException("Nie istnie przedmiot o id: " + id));
         return mapItemToDTO(item);
     }
 
     @Override
     public Set<ItemDTO> getAllItems() {
-        List<Item> all = itemRepository.findAll();
-        return all.stream()
+        return itemRepository.findAll().stream()
                 .map(ItemMapper::mapItemToDTO)
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public Set<ItemDTO> getAllItemsByHero(Long heroId) {
-        exceptCheck.ifHeroDoesNotExist(heroId);
-        Set<Item> itemsByHero = itemRepository.findAllByOwnerId(heroId);
-        return itemsByHero.stream()
+    public Set<ItemDTO> getAllItemsByHero(Long id) {
+        exceptCheck.ifHeroDoesNotExist(id);
+        return itemRepository.findAllByOwnerId(id).stream()
                 .map(ItemMapper::mapItemToDTO)
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public ItemDTO createItem(ItemDTO itemDTO) {
-        exceptCheck.ifHeroIdIsNull(itemDTO.getOwnerId());
-        exceptCheck.ifItemNameIsNull(itemDTO.getName());
-        checkItemNameExists(itemDTO.getName());
-        Hero hero = heroRepository.findById(itemDTO.getOwnerId())
-                .orElseThrow(() -> new HeroNotFoundException(itemDTO.getOwnerId().toString()));
+    public ItemDTO createItem(ItemDTO dto) {
+        exceptCheck.ifHeroIdIsNull(dto.getOwnerId());
+        exceptCheck.ifItemNameIsNull(dto.getName());
+        if (!itemRepository.existsByNameIgnoreCase(dto.getName())){
+            throw new UpdateConflictException("Istnieje już przedmiot o tej nazwie: " + dto.getName() );
+        }
+        Hero hero = heroRepository.findById(dto.getOwnerId())
+                .orElseThrow(() -> new ResourceNotFoundException("Nie istnie bohater o id: " + dto.getOwnerId()));
 
-        Item item = mapDTOToItem(itemDTO);
+        Item item = mapDTOToItem(dto);
         item.setOwner(hero);
         return mapItemToDTO(itemRepository.save(item));
     }
@@ -76,32 +72,30 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public void deleteItemById(Long id) {
+        if (!itemRepository.existsById(id)){
+            throw new ResourceNotFoundException("Nie istnie przedmiot o id: " + id );
+        }
         itemRepository.deleteById(id);
     }
 
     @Transactional
     @Override
     public void deleteItemByName(String name) {
+        if (!itemRepository.existsByNameIgnoreCase(name)){
+            throw new ResourceNotFoundException("Nie istnie przedmiot o nazwie: " + name );
+        }
         itemRepository.deleteByNameIgnoreCase(name);
     }
 
     @Transactional
     @Override
     public ItemDTO updateItem(Long id, ItemDTO dto) {
-        return mapItemToDTO(itemRepository.save(buildUpdateItem(dto, id)));
+        return mapItemToDTO(itemRepository.save(buildUpdateItem(id, dto)));
     }
 
-    private void checkItemNameExists(String itemName) {
-        if (itemRepository.existsByNameIgnoreCase(itemName)) {
-            throw new ResourceNotFoundException("Item o nazwie " + itemName + " juz istnieje");
-        }
-    }
-
-
-
-    private Item buildUpdateItem(ItemDTO dto, Long id) {
+    private Item buildUpdateItem(Long id, ItemDTO dto) {
         Item item = itemRepository.findById(id)
-                .orElseThrow(() -> new ItemNotFoundException(id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException("Nie istnie przedmiot o id: " + id ));
 
         if (!StringUtils.isBlank(dto.getName())) {
             item.setName(dto.getName());
@@ -113,7 +107,7 @@ public class ItemServiceImpl implements ItemService {
 
         if (dto.getOwnerId() != null) {
             item.setOwner(heroRepository.findById(dto.getOwnerId())
-                    .orElseThrow(() -> new HeroNotFoundException(dto.getOwnerId().toString())));
+                    .orElseThrow(() -> new ResourceNotFoundException("Nie istnie bohater o id: " + dto.getOwnerId())));
         }
 
         return item;

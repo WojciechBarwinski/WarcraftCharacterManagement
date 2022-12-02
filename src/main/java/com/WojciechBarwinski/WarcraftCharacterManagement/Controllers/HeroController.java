@@ -37,8 +37,8 @@ public class HeroController {
 
     @ApiOperation(value = "Read all heroes", notes = "Returns list with all heroes")
     @GetMapping()
-    public List<HeroDTOToPreview> readAllHero(@RequestParam int page, Sort.Direction direction){
-        return heroService.getAllHeroes(page, direction);
+    public List<HeroDTOToPreview> readAllHero(){
+        return heroService.getAllHeroes();
     }
 
     @ApiOperation(value = "Read a hero by id", notes = "Returns hero as per id")
@@ -56,7 +56,7 @@ public class HeroController {
     @ApiOperation(value = "Update a hero, need only new information", notes = "THIS METHOD DOESN'T UPDATE RELATION OR ITEM. Returns url and json with to updated hero")
     @PutMapping("/{id}")
     public ResponseEntity<DTOFlag> updateHero(@PathVariable Long id ,@RequestBody HeroDTO heroDTO){
-        return getCorrectResponseEntity(HERO, heroService.updateHero(heroDTO, id));
+        return getCorrectResponseEntity(HERO, heroService.updateHero(id, heroDTO));
     }
 
     @ApiOperation(value = "Delete hero by id", notes = "Return nothing")

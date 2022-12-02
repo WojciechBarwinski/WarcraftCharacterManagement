@@ -15,7 +15,7 @@ public interface HeroRepository extends JpaRepository<Hero, Long> {
     @Query("SELECT h FROM Hero h " +
             "JOIN FETCH h.race " +
             "LEFT JOIN FETCH h.fractions ")
-    List<Hero> findAllHeroes(Pageable page);
+    List<Hero> findAllHeroes();
 
     @Query("SELECT h FROM Hero h " +
             "LEFT JOIN FETCH h.books " +
@@ -38,6 +38,6 @@ public interface HeroRepository extends JpaRepository<Hero, Long> {
             "WHERE UPPER(h.firstName) = UPPER(?1)")
     Optional<Hero> findByFirstName(String firstName);
 
-    boolean existsByRace_Name(String name);
+    boolean existsByRace_NameIgnoreCase(String name);
 }
 

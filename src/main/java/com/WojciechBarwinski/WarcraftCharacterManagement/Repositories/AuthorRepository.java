@@ -12,4 +12,5 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     void deleteByFirstNameIgnoreCaseAndLastNameIgnoreCase(String firstName, String lastName);
 
     boolean existsByFirstNameIgnoreCaseAndLastNameIgnoreCase(String firstName, String lastName);
+
 }

@@ -1,6 +1,8 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Services;
 
 
+import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.IncorrectDateException;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper;
 import org.apache.commons.lang3.StringUtils;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.HeroDTOToPreview;
@@ -34,7 +36,6 @@ public class HeroServiceImpl implements HeroService {
     RaceRepository raceRepository;
     FractionRepository fractionRepository;
     BookRepository bookRepository;
-    private static final int PAGE_SIZE = 5;
 
 
     public HeroServiceImpl(HeroRepository heroRepository,
@@ -47,50 +48,50 @@ public class HeroServiceImpl implements HeroService {
         this.bookRepository = bookRepository;
     }
 
-    public List<HeroDTOToPreview> getAllHeroes(int page, Sort.Direction direction) {
-        List<HeroDTOToPreview> heroesDTO = new ArrayList<>();
-        for (Hero hero : heroRepository.findAllHeroes(PageRequest.of(page, PAGE_SIZE, Sort.by(direction, "firstName")))) {
-            heroesDTO.add(mapHeroToPreview(hero));
-        }
-        return heroesDTO;
+    public List<HeroDTOToPreview> getAllHeroes() {
+        return heroRepository.findAllHeroes().stream()
+                .map(HeroMapper::mapHeroToPreview)
+                .collect(Collectors.toList());
+
     }
 
     @Override
     public HeroDTO getHeroById(Long id) {
         return mapHeroToDTO(heroRepository.findById(id)
-                .orElseThrow(() -> new HeroNotFoundException(id.toString())));
+                .orElseThrow(() -> new ResourceNotFoundException("Nie istnie bohater o id: " + id)));
     }
 
     @Override
     public HeroDTO getHeroByFirstName(String firstName) {
         return mapHeroToDTO(heroRepository.findByFirstName(firstName)
-                .orElseThrow(() -> new HeroNotFoundException(firstName)));
+                .orElseThrow(() -> new ResourceNotFoundException("Nie istnie bohater o imieniu: " + firstName)));
     }
 
     @Transactional
     @Override
-    public HeroDTO createNewHero(HeroDTO heroDTO) {
-        Hero save = heroRepository.saveAndFlush(buildNewHero(heroDTO));
+    public HeroDTO createNewHero(HeroDTO dto) {
+        Hero save = heroRepository.saveAndFlush(buildNewHero(dto));
         return mapHeroToDTO(save);
     }
 
     @Transactional
     @Override
-    public HeroDTO updateHero(HeroDTO heroDTO, Long id) {
-        return mapHeroToDTO(heroRepository.save(buildUpdateHero(heroDTO, id)));
+    public HeroDTO updateHero(Long id, HeroDTO dto) {
+        Hero save = heroRepository.save(buildUpdateHero(id, dto));
+        return mapHeroToDTO(save);
     }
 
     @Override
     public void deleteHero(Long id) {
         if (!heroRepository.existsById(id)) {
-            throw new HeroNotFoundException(id.toString());
+            throw new ResourceNotFoundException("Nie istnie bohater o id: " + id);
         }
         heroRepository.deleteById(id);
     }
 
-    private Hero buildUpdateHero(HeroDTO dto, Long id) {
+    private Hero buildUpdateHero(Long id, HeroDTO dto) {
         Hero hero = heroRepository.findById(id)
-                .orElseThrow(() -> new HeroNotFoundException(id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException("Nie istnie bohater o id: " + id));
 
         if (!StringUtils.isBlank(dto.getFirstName())) {
             hero.setFirstName(dto.getFirstName());
@@ -119,17 +120,17 @@ public class HeroServiceImpl implements HeroService {
         return hero;
     }
 
-    private Hero buildNewHero(HeroDTO heroDTO) {
-        Hero hero = mapDTOToNewHero(heroDTO);
-        hero.setRace(checkRace(heroDTO.getRace()));
-        hero.setFractions(checkFraction(heroDTO.getFractions()));
-        hero.setBooks(checkBook(heroDTO.getBooks()));
+    private Hero buildNewHero(HeroDTO dto) {
+        Hero hero = mapDTOToNewHero(dto);
+        hero.setRace(checkRace(dto.getRace()));
+        hero.setFractions(checkFraction(dto.getFractions()));
+        hero.setBooks(checkBook(dto.getBooks()));
         return hero;
     }
 
     private Race checkRace(String raceName) {
         return raceRepository.findByNameIgnoreCase(raceName)
-                .orElseThrow(() -> new ResourceNotFoundException(raceName + " -> this race doesn't exist"));
+                .orElseThrow(() -> new ResourceNotFoundException("Nie istnieje rasa o nazwie: " + raceName));
     }
 
     private Set<String> updateTitleSet(Set<String> originalTitles, Set<String> titlesToCheck){
@@ -140,7 +141,6 @@ public class HeroServiceImpl implements HeroService {
                 originalTitles.add(title);
             }
         }
-
         return originalTitles;
     }
 
@@ -189,7 +189,7 @@ public class HeroServiceImpl implements HeroService {
                 .map(Fraction::getName).collect(Collectors.toSet());
         names.removeAll(collect);
 
-        throw new ResourceNotFoundException(stringWithIncorrectNames(names) + " -> this fraction/s doesn't exist");
+        throw new ResourceNotFoundException("Nie istnieja frakcje o nazwach: " + stringWithIncorrectNames(names));
     }
 
     private void throwExceptionWithIncorrectBooksTitles(Set<String> names, Set<Book> fractions) {
@@ -197,7 +197,7 @@ public class HeroServiceImpl implements HeroService {
                 .map(Book::getTitle).collect(Collectors.toSet());
         names.removeAll(collect);
 
-        throw new ResourceNotFoundException(stringWithIncorrectNames(names) + " -> this fraction/s doesn't exist");
+        throw new ResourceNotFoundException("Nie istnieją ksiazki o nazwach: " + stringWithIncorrectNames(names));
     }
 
     private String stringWithIncorrectNames(Set<String> names) {
