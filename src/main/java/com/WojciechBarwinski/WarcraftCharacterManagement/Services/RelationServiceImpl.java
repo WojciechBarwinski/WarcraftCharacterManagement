@@ -5,8 +5,8 @@ import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Hero;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Relation;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.RelationKey;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ExceptionChecker;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.HeroNotFoundException;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapper;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ExceptionMessage;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ResourceNotFoundException;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.HeroRepository;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.RelationRepository;
 import org.springframework.stereotype.Service;
@@ -19,16 +19,19 @@ import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.HeroMapp
 @Service
 public class RelationServiceImpl implements RelationService {
 
-    HeroRepository heroRepository;
-    RelationRepository relationRepository;
-    ExceptionChecker exceptCheck;
+    private final HeroRepository heroRepository;
+    private final RelationRepository relationRepository;
+    private final ExceptionChecker exceptCheck;
+    private final ExceptionMessage em;
 
     public RelationServiceImpl(RelationRepository relationRepository,
                                HeroRepository heroRepository,
-                               ExceptionChecker exceptCheck) {
+                               ExceptionChecker exceptCheck,
+                               ExceptionMessage exceptionMessage) {
         this.relationRepository = relationRepository;
         this.heroRepository = heroRepository;
         this.exceptCheck = exceptCheck;
+        this.em = exceptionMessage;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class RelationServiceImpl implements RelationService {
         exceptCheck.ifHeroDoesNotExist(ownerId);
         exceptCheck.ifIdAndNameAreNull(heroId, heroName);
 
-        if (heroId!= null){
+        if (heroId != null) {
             relationRepository.save(createRelationById(ownerId, heroId, relation.getDescription()));
         } else {
             relationRepository.save(createRelationByName(ownerId, heroName, relation.getDescription()));
@@ -63,7 +66,7 @@ public class RelationServiceImpl implements RelationService {
         Long heroId = updateRelation.getHeroId();
         exceptCheck.ifDescriptionDoesNotExist(updateRelation.getDescription());
 
-        if (!relationRepository.existsByKey_OwnerIdAndKey_OtherId(ownerId, heroId)){
+        if (!relationRepository.existsByKey_OwnerIdAndKey_OtherId(ownerId, heroId)) {
             return createNewRelation(ownerId, updateRelation);
         }
         Relation relation = relationRepository.findByKey_OwnerIdAndKey_OtherId(ownerId, heroId);
@@ -87,7 +90,7 @@ public class RelationServiceImpl implements RelationService {
         relationRepository.deleteByKey_OwnerIdAndKey_OtherId(heroId, ownerId);
     }
 
-    private Relation createRelationById(Long ownerId, Long heroId, String description){
+    private Relation createRelationById(Long ownerId, Long heroId, String description) {
         exceptCheck.ifOwnerIdAndHeroIdAreTheSame(ownerId, heroId);
         exceptCheck.ifHeroDoesNotExist(heroId);
         RelationKey keyById = new RelationKey(heroRepository.findById(ownerId).orElseThrow(),
@@ -95,9 +98,9 @@ public class RelationServiceImpl implements RelationService {
         return new Relation(keyById, description);
     }
 
-    private Relation createRelationByName(Long ownerId, String heroName, String description){
+    private Relation createRelationByName(Long ownerId, String heroName, String description) {
         Hero hero = heroRepository.findByFirstName(heroName)
-                .orElseThrow(() -> new HeroNotFoundException(heroName));
+                .orElseThrow(() -> new ResourceNotFoundException(em.getMessage("noHeroName") + heroName));
         exceptCheck.ifOwnerIdAndHeroIdAreTheSame(ownerId, hero.getId());
         RelationKey keyByName = new RelationKey(heroRepository.findById(ownerId).orElseThrow(),
                 hero);

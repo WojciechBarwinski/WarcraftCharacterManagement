@@ -3,7 +3,10 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Services;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.ItemDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Hero;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Item;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.*;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ExceptionChecker;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ExceptionMessage;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ResourceNotFoundException;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.UpdateConflictException;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.ItemMapper;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.HeroRepository;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.ItemRepository;
@@ -20,22 +23,25 @@ import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.ItemMapp
 @Service
 public class ItemServiceImpl implements ItemService {
 
-    ItemRepository itemRepository;
-    HeroRepository heroRepository;
-    ExceptionChecker exceptCheck;
+    private final ItemRepository itemRepository;
+    private final HeroRepository heroRepository;
+    private final ExceptionChecker exceptCheck;
+    private final ExceptionMessage em;
 
     public ItemServiceImpl(ItemRepository itemRepository,
                            HeroRepository heroRepository,
-                           ExceptionChecker exceptCheck) {
+                           ExceptionChecker exceptCheck,
+                           ExceptionMessage exceptionMessage) {
         this.itemRepository = itemRepository;
         this.heroRepository = heroRepository;
         this.exceptCheck = exceptCheck;
+        this.em = exceptionMessage;
     }
 
     @Override
     public ItemDTO getItemByID(Long id) {
         Item item = itemRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Nie istnie przedmiot o id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(em.getMessage("noItemId") + id));
         return mapItemToDTO(item);
     }
 
@@ -58,11 +64,11 @@ public class ItemServiceImpl implements ItemService {
     public ItemDTO createItem(ItemDTO dto) {
         exceptCheck.ifHeroIdIsNull(dto.getOwnerId());
         exceptCheck.ifItemNameIsNull(dto.getName());
-        if (!itemRepository.existsByNameIgnoreCase(dto.getName())){
-            throw new UpdateConflictException("Istnieje już przedmiot o tej nazwie: " + dto.getName() );
+        if (!itemRepository.existsByNameIgnoreCase(dto.getName())) {
+            throw new UpdateConflictException(em.getMessage("isItemName") + dto.getName());
         }
         Hero hero = heroRepository.findById(dto.getOwnerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Nie istnie bohater o id: " + dto.getOwnerId()));
+                .orElseThrow(() -> new ResourceNotFoundException(em.getMessage("noHeroId") + dto.getOwnerId()));
 
         Item item = mapDTOToItem(dto);
         item.setOwner(hero);
@@ -72,8 +78,8 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public void deleteItemById(Long id) {
-        if (!itemRepository.existsById(id)){
-            throw new ResourceNotFoundException("Nie istnie przedmiot o id: " + id );
+        if (!itemRepository.existsById(id)) {
+            throw new ResourceNotFoundException(em.getMessage("noItemId") + id);
         }
         itemRepository.deleteById(id);
     }
@@ -81,8 +87,8 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public void deleteItemByName(String name) {
-        if (!itemRepository.existsByNameIgnoreCase(name)){
-            throw new ResourceNotFoundException("Nie istnie przedmiot o nazwie: " + name );
+        if (!itemRepository.existsByNameIgnoreCase(name)) {
+            throw new ResourceNotFoundException(em.getMessage("noItemName") + name);
         }
         itemRepository.deleteByNameIgnoreCase(name);
     }
@@ -95,7 +101,7 @@ public class ItemServiceImpl implements ItemService {
 
     private Item buildUpdateItem(Long id, ItemDTO dto) {
         Item item = itemRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Nie istnie przedmiot o id: " + id ));
+                .orElseThrow(() -> new ResourceNotFoundException(em.getMessage("noItemId") + id));
 
         if (!StringUtils.isBlank(dto.getName())) {
             item.setName(dto.getName());
@@ -107,7 +113,7 @@ public class ItemServiceImpl implements ItemService {
 
         if (dto.getOwnerId() != null) {
             item.setOwner(heroRepository.findById(dto.getOwnerId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Nie istnie bohater o id: " + dto.getOwnerId())));
+                    .orElseThrow(() -> new ResourceNotFoundException(em.getMessage("noHeroId") + dto.getOwnerId())));
         }
 
         return item;

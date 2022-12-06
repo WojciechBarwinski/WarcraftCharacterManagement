@@ -4,7 +4,7 @@ package com.WojciechBarwinski.WarcraftCharacterManagement.Services;
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.RaceDTO;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Entities.Race;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ExceptionChecker;
-import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.IncorrectDateException;
+import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ExceptionMessage;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ResourceNotFoundException;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.RaceMapper;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Repositories.HeroRepository;
@@ -24,13 +24,16 @@ public class RaceServiceImpl implements RaceService {
     private final RaceRepository raceRepository;
     private final HeroRepository heroRepository;
     private final ExceptionChecker exceptCheck;
+    private final ExceptionMessage em;
 
     public RaceServiceImpl(RaceRepository raceRepository,
                            HeroRepository heroRepository,
-                           ExceptionChecker exceptCheck) {
+                           ExceptionChecker exceptCheck,
+                           ExceptionMessage exceptionMessage) {
         this.raceRepository = raceRepository;
         this.heroRepository = heroRepository;
         this.exceptCheck = exceptCheck;
+        this.em = exceptionMessage;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class RaceServiceImpl implements RaceService {
     @Override
     public RaceDTO getRace(String raceName) {
         Race race = raceRepository.findByNameIgnoreCase(raceName)
-                .orElseThrow(() -> new ResourceNotFoundException("Nie istnieje rasa o nazwie: " + raceName));
+                .orElseThrow(() -> new ResourceNotFoundException(em.getMessage("noRaceName") + raceName));
 
         return mapRaceToDTO(race);
     }
@@ -65,7 +68,7 @@ public class RaceServiceImpl implements RaceService {
     @Override
     public void deleteRace(String raceName) {
         if (heroRepository.existsByRace_NameIgnoreCase(raceName)) {
-            throw new ResourceNotFoundException("Nie istnieje rasa o nazwie: " + raceName);
+            throw new ResourceNotFoundException(em.getMessage("noRaceName") + raceName);
         } else
             raceRepository.deleteByNameIgnoreCase(raceName);
     }
