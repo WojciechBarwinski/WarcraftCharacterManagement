@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.WojciechBarwinski.WarcraftCharacterManagement.Mappers.BookMapper.mapBookToDTO;
+
 @Service
 public class BookServiceImpl implements BookService {
 
@@ -32,6 +34,26 @@ public class BookServiceImpl implements BookService {
                 .collect(Collectors.toSet());
     }
 
+    @Override
+    public BookDTO getBookById(Long id) {
+        return mapBookToDTO(bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(em.getMessage("noBookId") + id)));
+    }
+
+    @Override
+    public BookDTO getBookByTitle(String title) {
+        return mapBookToDTO(bookRepository.findByTitleIgnoreCase(title)
+                .orElseThrow(() -> new ResourceNotFoundException(em.getMessage("noBookName") + title)));
+    }
+
+    @Override
+    public Set<BookDTO> getAllBooksBySeries(String seriesTitle) {
+        return bookRepository.findBySeriesIgnoreCase(seriesTitle)
+                .stream()
+                .map(BookMapper::mapBookToDTOToPreview)
+                .collect(Collectors.toSet());
+    }
+
     @Transactional
     @Override
     public void deleteBookById(Long id) {
@@ -39,6 +61,7 @@ public class BookServiceImpl implements BookService {
             throw new ResourceNotFoundException(em.getMessage("noBookId") + id);
         }
         bookRepository.deleteById(id);
-
     }
+
+
 }

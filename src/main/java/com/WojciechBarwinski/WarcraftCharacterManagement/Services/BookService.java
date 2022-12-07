@@ -8,4 +8,10 @@ public interface BookService {
 
     Set<BookDTO> getAllBooks();
     void deleteBookById(Long id);
+
+    BookDTO getBookById(Long id);
+
+    BookDTO getBookByTitle(String title);
+
+    Set<BookDTO> getAllBooksBySeries(String seriesTitle);
 }

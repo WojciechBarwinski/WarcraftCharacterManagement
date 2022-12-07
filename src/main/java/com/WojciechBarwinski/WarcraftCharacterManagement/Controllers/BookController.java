@@ -21,6 +21,21 @@ public class BookController {
         return bookService.getAllBooks();
     }
 
+    @GetMapping("/series")
+    public Set<BookDTO> readAllBooksBySeries(@RequestParam String seriesTitle){
+        return bookService.getAllBooksBySeries(seriesTitle);
+    }
+
+    @GetMapping(value = "/{id}")
+    public BookDTO readBookById(Long id){
+        return bookService.getBookById(id);
+    }
+
+    @GetMapping("/")
+    public BookDTO readBookByTitle(@RequestParam String title){
+        return bookService.getBookByTitle(title);
+    }
+
     @DeleteMapping(value = "/{id}")
     void deleteBookById(@RequestParam Long id){
         bookService.deleteBookById(id);
