@@ -1,6 +1,5 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Controllers;
 
-import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.HeroNotFoundException;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.IncorrectDateException;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.ResourceNotFoundException;
 import com.WojciechBarwinski.WarcraftCharacterManagement.Exception.UpdateConflictException;

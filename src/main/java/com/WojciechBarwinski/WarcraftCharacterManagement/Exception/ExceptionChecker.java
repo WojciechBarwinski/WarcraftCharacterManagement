@@ -18,7 +18,7 @@ public class ExceptionChecker {
 
     public void ifHeroDoesNotExist(Long id) {
         if (!heroRepository.existsById(id)) {
-            throw new HeroNotFoundException(id.toString());
+            throw new ResourceNotFoundException(em.getMessage("NoHeroId") + id);
         }
     }
 
