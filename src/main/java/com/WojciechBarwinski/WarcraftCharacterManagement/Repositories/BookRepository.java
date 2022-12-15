@@ -25,4 +25,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Optional<Book> findById(Long id);
 
     Set<Book> findBySeriesIgnoreCase(String seriesTitle);
+
+    boolean existsByTitleIgnoreCase(String title);
+
+    void deleteByTitleIgnoreCase(String title);
 }

@@ -196,7 +196,7 @@ public class HeroServiceImpl implements HeroService {
                 .map(Book::getTitle).collect(Collectors.toSet());
         names.removeAll(collect);
 
-        throw new ResourceNotFoundException(em.getMessage("noBookName") + stringWithIncorrectNames(names));
+        throw new ResourceNotFoundException(em.getMessage("noBookTitle") + stringWithIncorrectNames(names));
     }
 
     private String stringWithIncorrectNames(Set<String> names) {

@@ -12,9 +12,19 @@ public class BookMapper {
     private BookMapper() {
     }
 
+    public static Book mapDTOToBook(BookDTO dto){
+        return Book.builder()
+                .title(dto.getTitle())
+                .description(dto.getDescription())
+                .series(dto.getSeries())
+                .build();
+    }
+
     public static BookDTO mapBookToDTO(Book book){
         BookDTO bookDTO=  mapBookWithoutHeroes(book);
-        bookDTO.setHeroes(mapHeroToString(book.getHeroes()));
+        if (book.getHeroes() != null){
+            bookDTO.setHeroes(mapHeroToString(book.getHeroes()));
+        }
         return bookDTO;
     }
 

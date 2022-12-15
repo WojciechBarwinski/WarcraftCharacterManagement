@@ -52,6 +52,12 @@ public class ExceptionChecker {
         }
     }
 
+    public void ifBookTitleIsNull(String title){
+        if (title == null || title.isEmpty()) {
+            throw new IncorrectDateException(em.getMessage("nullBookTitle"));
+        }
+    }
+
     public void ifRaceNameDoesNotExist(String name) {
         if (name == null || name.isEmpty()) {
             throw new IncorrectDateException(em.getMessage("nullRaceName"));
@@ -60,7 +66,13 @@ public class ExceptionChecker {
 
     public void ifAuthorNamesAreNull(String firstName, String lastName) {
         if ((firstName == null || firstName.isEmpty()) || (lastName == null || lastName.isEmpty())) {
-            throw new IncorrectDateException(em.getMessage("nullHeroNames"));
+            throw new IncorrectDateException(em.getMessage("nullAuthorName"));
+        }
+    }
+
+    public void ifAuthorNamesAreNull(String lastName) {
+        if (lastName == null || lastName.isEmpty()) {
+            throw new IncorrectDateException(em.getMessage("nullAuthorName"));
         }
     }
 }

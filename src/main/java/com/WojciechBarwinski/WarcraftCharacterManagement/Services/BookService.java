@@ -1,6 +1,7 @@
 package com.WojciechBarwinski.WarcraftCharacterManagement.Services;
 
 import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.BookDTO;
+import com.WojciechBarwinski.WarcraftCharacterManagement.DTOs.DTOFlag;
 
 import java.util.Set;
 
@@ -14,4 +15,10 @@ public interface BookService {
     BookDTO getBookByTitle(String title);
 
     Set<BookDTO> getAllBooksBySeries(String seriesTitle);
+
+    void deleteBookByTitle(String title);
+
+    BookDTO createBook(BookDTO bookDTO);
+
+    DTOFlag updateBook(Long id, BookDTO bookDTO);
 }
